@@ -23,6 +23,7 @@
     <string name="button_dbA">dB::dBA</string>
     <string name="button_spectrum_spectrogram_mode">1D::2D</string>
     <string name="button_recording">Mon::Rec</string>
+    <string name="button_freq_freq">Curs</string>
 
     <!-- permission dialog -->
     <string name="permission_explanation_title">Permission denied</string>
@@ -42,6 +43,10 @@
     <string name="et_db_setting_upper_bound">dB upper bound</string>
     <string name="show_range_lock">Lock Range</string>
     <string name="show_range_button_lock">Load Previous</string>
+
+    <!-- Set cursor frequency dialog -->
+    <string name="set_cursor_freq_dialog_title">Set cursor freq [Hz]</string>
+    <string name="set_cursor_freq_hint">freq [Hz]</string>
 
     <!-- Pop-up menu -->
     <string name="menu_manual">User Manual</string>

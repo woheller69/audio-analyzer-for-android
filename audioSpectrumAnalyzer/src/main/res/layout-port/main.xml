@@ -62,20 +62,7 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <github.bewantbe.audio_analyzer_for_android.SelectorText
-            android:id="@+id/button_recording"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:paddingLeft="15dp"
-            android:paddingStart="15dp"
-            android:tag="select"
-            android:text="Mon"
-            android:textSize="20sp"
-            custom:itemsDisplay="@string/button_recording"
-            custom:items="Mon Rec" />
-
-        <Button
+          <Button
             android:id="@+id/button_sample_rate"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/button_button_height"
@@ -101,12 +88,33 @@
             android:onClick="showPopupMenu"
             android:text="@string/ave"
             android:textSize="@dimen/button_text_fontsize" />
+        <Button
+            android:id="@+id/button_set_cursor_freq"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_button_height"
+            android:layout_gravity="center"
+            android:onClick="showCursorFreqPopup"
+            android:text="@string/button_freq_freq"
+            android:textSize="@dimen/button_text_fontsize" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center" >
+
+        <github.bewantbe.audio_analyzer_for_android.SelectorText
+            android:id="@+id/button_recording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:paddingLeft="15dp"
+            android:paddingStart="15dp"
+            android:tag="select"
+            android:text="Mon"
+            android:textSize="20sp"
+            custom:itemsDisplay="@string/button_recording"
+            custom:items="Mon Rec" />
 
         <github.bewantbe.audio_analyzer_for_android.SelectorText
             android:id="@+id/spectrum_spectrogram_mode"

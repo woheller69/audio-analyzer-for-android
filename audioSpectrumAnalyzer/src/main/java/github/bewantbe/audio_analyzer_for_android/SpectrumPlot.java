@@ -169,6 +169,12 @@ class SpectrumPlot {
         cursorDB   = plot2D.axisY.vFromPixel(y);  // decibel
     }
 
+    // x, y is in frequency/DB units
+    void setCursorFreq(double x, double y) {
+        cursorFreq = x;
+        cursorDB = y;
+    }
+
     double getCursorFreq() {
         return  canvasWidth == 0 ? 0 : cursorFreq;
     }
@@ -190,6 +196,7 @@ class SpectrumPlot {
         if (cursorFreq != 0) {
             plot2D.plotCrossline(c, cursorFreq, cursorDB, cursorPaint);
         }
+
         plot2D.drawAxisLabels(c, labelPaint, gridPaint, gridPaint);
     }
 }

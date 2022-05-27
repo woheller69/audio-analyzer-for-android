@@ -192,6 +192,11 @@ class SpectrogramPlot {
         }
     }
 
+    // x is in frequency units
+    void setCursorFreq(double x) {
+        cursorFreq = x;
+    }
+
     TimeAxisMode getSpectrogramMode() {
         return showModeSpectrogram;
     }

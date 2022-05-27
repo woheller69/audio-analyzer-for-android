@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <!-- Somehow android:layout_height="wrap_content" not working correctly on low resolution device -->
+
+    <TextView
+        android:id="@+id/set_cursor_freq_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_cursor_freq"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/set_cursor_freq_dialog_title"/>
+
+    <EditText
+        android:id="@+id/et_cursor_freq"
+        android:layout_width="wrap_content"
+        android:layout_height="40sp"
+        android:layout_marginTop="5dp"
+        android:hint="@string/set_cursor_freq_hint"
+        android:inputType="numberDecimal|numberSigned"
+        android:maxEms="6" />
+
+</RelativeLayout>

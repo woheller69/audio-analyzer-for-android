@@ -424,6 +424,11 @@ public class AnalyzerGraphic extends View {
         }
     }
 
+    public void setCursorFreq(double f) {
+        spectrumPlot.setCursorFreq(f,1000);
+        spectrogramPlot.setCursorFreq(f);
+    }
+
     public double getCursorFreq() {
         if (showMode == PlotMode.SPECTRUM) {
             return spectrumPlot.getCursorFreq();

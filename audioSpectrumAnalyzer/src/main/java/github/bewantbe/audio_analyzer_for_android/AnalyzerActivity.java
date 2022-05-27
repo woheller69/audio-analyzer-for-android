@@ -70,6 +70,7 @@ public class AnalyzerActivity extends Activity
     SamplingLoop samplingThread = null;
     private RangeViewDialogC rangeViewDialogC;
     private GestureDetectorCompat mDetector;
+    private SetCursorFreqDialog setCursorFreqDialog;
 
     private AnalyzerParameters analyzerParam = null;
 
@@ -115,6 +116,7 @@ public class AnalyzerActivity extends Activity
         }, "select");
 
         rangeViewDialogC = new RangeViewDialogC(this, analyzerViews.graphView);
+        setCursorFreqDialog = new SetCursorFreqDialog(this, analyzerViews.graphView);
 
         mDetector = new GestureDetectorCompat(this, new AnalyzerGestureListener());
     }
@@ -482,6 +484,10 @@ public class AnalyzerActivity extends Activity
     // Button processing
     public void showPopupMenu(View view) {
         analyzerViews.showPopupMenu(view);
+    }
+
+    public void showCursorFreqPopup(View view) {
+        setCursorFreqDialog.ShowSetCursorFreqDialog();
     }
 
     /**

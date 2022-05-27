@@ -26,6 +26,9 @@
 <font color="green">N AVE</font>
 <br/>Number of spectrum average for a display of spectrum or spectrogram. Higher value will make the spectrum less noisy and more smooth, at the cost of lower time resolution.
 <p/>
+<font color="green">Curs</font>
+<br/>Set precise cursor frequency by keypad.
+<p/>
 
 <h2>Viewport operation</h2>
 <font color="#00BFFF">Drag and Swipe</font>
@@ -40,6 +43,7 @@
 <font color="#00BFFF">Long press</font>
 <br/>Place a cursor at the point pressing, you can move the cursor while pressing. Once the finger leaves the screen, the cursor fixed at the last position.
 <br/>Move the cursor outside viewport to delete it.
+<br/>Tap the <b>Curs</b> button to set the cursor frequency precisely by keyboard.
 <p/>
 
 <h2>Get a screen shot</h2>

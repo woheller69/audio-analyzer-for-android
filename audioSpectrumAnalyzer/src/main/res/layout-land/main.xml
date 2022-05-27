@@ -167,6 +167,14 @@
             android:onClick="showPopupMenu"
             android:text="@string/ave"
             android:textSize="18sp" />
+        <Button
+            android:id="@+id/button_set_cursor_freq"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_button_height"
+            android:layout_gravity="center"
+            android:onClick="showCursorFreqPopup"
+            android:text="@string/button_freq_freq"
+            android:textSize="@dimen/button_text_fontsize" />
     </LinearLayout>
 
 </LinearLayout>
