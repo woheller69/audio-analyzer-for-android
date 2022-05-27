@@ -26,7 +26,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.text.method.LinkMovementMethod;

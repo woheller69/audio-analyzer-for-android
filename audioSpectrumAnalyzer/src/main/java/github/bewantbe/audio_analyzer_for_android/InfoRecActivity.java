@@ -21,7 +21,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import androidx.core.app.NavUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
