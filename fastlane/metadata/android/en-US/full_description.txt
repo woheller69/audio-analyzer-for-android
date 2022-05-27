@@ -1,0 +1,19 @@
+<i>Spectrum Spectogram Analyzer</i> was designed with accuracy and easy of use in mind. It can be used for monitoring or measuring environmental sound or noise; help tuning instruments; timing short sound events; and educational purpose.
+
+<br><b>Features:</b>
+
+* No Ads.
+* With log or linear frequency axis.
+* Can label frequency axis using music pitch note.
+* Support all possible sampling rates and almost all recorder sources of your device.
+* Graph with nice grid lines and labels, easy to operate.
+* FFT sample size range from 512 to 8192. Using half-overlapped (adjustable) time window to increase time resolution.
+* Various window functions provided, for different frequency resolution and dynamical range.
+* Peak frequency detection (in unit of Hz and note+cent), with a moderate accuracy (FFT + interpolation).
+* With dB or A-weighting dB (dBA).
+* Can record the audio in wav (PCM) format.
+* Pinch to zoom, drag or swipe to move, long-press to place cursor, double touch to reset zoom.
+
+<b>Notes: May need some knowledge of discrete Fourier transform and spectrum analysis to use it well. The actual accuracy mainly depends on your device. No calibration interface provided.
+
+Comments and suggestions are welcome.
