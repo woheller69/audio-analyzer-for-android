@@ -45,7 +45,9 @@ public class SetCursorFreqDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         setCursorFrequencyView.findViewById(R.id.et_cursor_freq);
-                        double freq = Double.parseDouble(et_cursor_freq.getText().toString());
+                        String freqstring = et_cursor_freq.getText().toString().replaceAll(",",".");
+                        if (!freqstring.contains(".")) freqstring = freqstring + ".0";
+                        double freq = Double.parseDouble(freqstring);
                         graphView.setCursorFreq(freq);
 
                         // Save setting to preference, after sanitized.
