@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="github.bewantbe.audio_analyzer_for_android"
+    package="org.woheller69.audio_analyzer_for_android"
     android:installLocation="auto">
-
-    <!--<uses-sdk-->
-        <!--android:minSdkVersion="8"-->
-        <!--android:targetSdkVersion="25" />-->
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -15,12 +11,12 @@
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@drawable/icon"
+        android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         android:label="@string/app_name"
         android:theme="@style/DarkThemeSelector" >
         <activity
-            android:name="github.bewantbe.audio_analyzer_for_android.AnalyzerActivity"
+            android:name="org.woheller69.audio_analyzer_for_android.AnalyzerActivity"
             android:label="@string/app_name"
             android:exported="true">
             <intent-filter>
@@ -39,16 +35,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="github.bewantbe.audio_analyzer_for_android.MyPreferences"
+            android:name="org.woheller69.audio_analyzer_for_android.MyPreferences"
             android:label="@string/preferences" >
         </activity>
         <activity
-            android:name="github.bewantbe.audio_analyzer_for_android.InfoRecActivity"
+            android:name="org.woheller69.audio_analyzer_for_android.InfoRecActivity"
             android:label="@string/title_activity_info_rec"
-            android:parentActivityName="github.bewantbe.audio_analyzer_for_android.AnalyzerActivity" >
+            android:parentActivityName="org.woheller69.audio_analyzer_for_android.AnalyzerActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="github.bewantbe.audio_analyzer_for_android.AnalyzerActivity" />
+                android:value="org.woheller69.audio_analyzer_for_android.AnalyzerActivity" />
         </activity>
     </application>
 

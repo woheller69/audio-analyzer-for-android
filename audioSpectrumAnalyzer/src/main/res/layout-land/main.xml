@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="0.32"
-        class="github.bewantbe.audio_analyzer_for_android.AnalyzerGraphic"
+        class="org.woheller69.audio_analyzer_for_android.AnalyzerGraphic"
         custom:cutoffDb="-25"
         custom:sampleRate="16000" />
 
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:gravity="center" >
 
-        <github.bewantbe.audio_analyzer_for_android.SelectorText
+        <org.woheller69.audio_analyzer_for_android.SelectorText
             android:id="@+id/button_recording"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             android:textSize="20sp"
             custom:items="Mon Rec" />
 
-        <github.bewantbe.audio_analyzer_for_android.SelectorText
+        <org.woheller69.audio_analyzer_for_android.SelectorText
             android:id="@+id/spectrum_spectrogram_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
             custom:itemsDisplay="@string/button_spectrum_spectrogram_mode"
             custom:items="spum spam" />
 
-        <github.bewantbe.audio_analyzer_for_android.SelectorText
+        <org.woheller69.audio_analyzer_for_android.SelectorText
             android:id="@+id/dbA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
         <!--android:textSize="20sp"-->
         <!--custom:items="cursor scale" />-->
 
-        <github.bewantbe.audio_analyzer_for_android.SelectorText
+        <org.woheller69.audio_analyzer_for_android.SelectorText
             android:id="@+id/freq_scaling_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
             custom:itemsDisplay="@string/button_freq_scaling_mode"
             custom:items="linear log note" />
 
-        <github.bewantbe.audio_analyzer_for_android.SelectorText
+        <org.woheller69.audio_analyzer_for_android.SelectorText
             android:id="@+id/run"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
