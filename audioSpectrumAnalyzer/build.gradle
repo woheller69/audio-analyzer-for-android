@@ -26,5 +26,5 @@ android {
 dependencies {
     implementation project(':FFTLibrary')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
 }

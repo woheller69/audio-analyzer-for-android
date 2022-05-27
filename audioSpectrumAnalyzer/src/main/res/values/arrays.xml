@@ -126,6 +126,7 @@
         <item>4096::4096</item>
         <item>8192::8192</item>
         <item>16384::16384</item>
+        <item>32768::32768</item>
     </string-array>
     <string-array name="fft_ave_num" translatable="false">
         <item>@string/fft_ave_num_name</item>
