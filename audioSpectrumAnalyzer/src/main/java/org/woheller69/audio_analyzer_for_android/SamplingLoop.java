@@ -303,7 +303,7 @@ class SamplingLoop extends Thread {
         if (bSaveWavLoop) {
             Log.i(TAG, "SamplingLoop::Run(): Ending saved wav.");
             wavWriter.stop();
-            activity.analyzerViews.notifyWAVSaved(wavWriter.relativeDir);
+            activity.analyzerViews.notifyWAVSaved(wavWriter.getDir());
         }
     }
 

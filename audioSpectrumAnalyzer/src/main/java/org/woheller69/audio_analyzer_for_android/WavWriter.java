@@ -15,6 +15,7 @@
 
 package org.woheller69.audio_analyzer_for_android;
 
+import static android.os.Environment.DIRECTORY_MUSIC;
 import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.os.StatFs;
@@ -35,7 +36,6 @@ class WavWriter {
   private File outPath;
   private OutputStream out;
   private byte[] header = new byte[44];
-  final String relativeDir = "/Recorder";
 
   private int channels = 1;
   private byte RECORDER_BPP = 16;  // bits per sample
@@ -115,7 +115,7 @@ class WavWriter {
     if (!isExternalStorageWritable()) {
       return false;
     }
-    File path = new File(Environment.getExternalStorageDirectory().getPath() + relativeDir);
+    File path = Environment.getExternalStoragePublicDirectory(DIRECTORY_MUSIC);
     if (!path.exists() && !path.mkdirs()) {
       Log.e(TAG, "Failed to make directory: " + path.toString());
       return false;
@@ -206,5 +206,8 @@ class WavWriter {
   String getPath() {
     return outPath.getPath();
   }
-  
+
+  String getDir(){
+    return String.valueOf(Environment.getExternalStoragePublicDirectory(DIRECTORY_MUSIC));
+  }
 }
