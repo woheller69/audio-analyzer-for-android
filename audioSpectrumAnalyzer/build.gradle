@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "github.bewantbe.audio_analyzer_for_android"
+        applicationId "org.woheller69.audio_analyzer_for_android"
         minSdkVersion 14
         targetSdkVersion 31
         versionCode 170
