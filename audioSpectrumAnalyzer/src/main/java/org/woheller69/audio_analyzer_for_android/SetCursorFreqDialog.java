@@ -45,11 +45,7 @@ public class SetCursorFreqDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         setCursorFrequencyView.findViewById(R.id.et_cursor_freq);
-                        String freqstring = et_cursor_freq.getText().toString().replaceAll(",",".");
-                        if (!freqstring.contains(".")) freqstring = freqstring + ".0";
-                        double freq = Double.parseDouble(freqstring);
-                        graphView.setCursorFreq(freq);
-
+                        graphView.setCursorFreq(Double.parseDouble(et_cursor_freq.getText().toString().replaceAll(",",".")));
                         // Save setting to preference, after sanitized.
                     }
                 })
@@ -58,8 +54,7 @@ public class SetCursorFreqDialog {
                         Log.v(TAG, "cursor frequency dialog: Canceled");
                     }
                 });
-//    freqDialogBuilder
-//            .setTitle("dialog_title");
+
         setCursorFreqDialog = setCursorFreqBuilder.create();
     }
 }

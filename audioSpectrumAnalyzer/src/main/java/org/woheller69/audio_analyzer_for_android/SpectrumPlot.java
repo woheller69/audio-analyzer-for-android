@@ -68,6 +68,7 @@ class SpectrumPlot {
 
         cursorPaint = new Paint(gridPaint);
         cursorPaint.setColor(Color.parseColor("#00CD00"));
+        cursorPaint.setStrokeWidth(2);
 
         labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         labelPaint.setColor(Color.GRAY);

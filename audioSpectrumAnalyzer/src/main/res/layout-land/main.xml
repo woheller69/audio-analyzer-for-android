@@ -66,11 +66,32 @@
             android:layout_height="40sp"
             android:layout_alignParentTop="true"
             android:layout_gravity="center"
-            android:layout_toRightOf="@+id/button_sample_rate"
             android:layout_toEndOf="@+id/button_sample_rate"
+            android:layout_toRightOf="@+id/button_sample_rate"
             android:onClick="showPopupMenu"
             android:text="@string/fftlen"
             android:textSize="18sp" />
+        <Button
+            android:id="@+id/button_average"
+            android:layout_width="wrap_content"
+            android:layout_height="40sp"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/button_fftlen"
+            android:layout_toRightOf="@+id/button_fftlen"
+            android:onClick="showPopupMenu"
+            android:text="@string/ave"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/button_set_cursor_freq"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_button_height"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/button_average"
+            android:layout_toRightOf="@+id/button_average"
+            android:onClick="showCursorFreqPopup"
+            android:text="@string/button_freq_freq"
+            android:textSize="@dimen/button_text_fontsize" />
+
     </RelativeLayout>
 
     <TextView
@@ -159,22 +180,7 @@
             android:textSize="20sp"
             custom:items="run stop" />
 
-        <Button
-            android:id="@+id/button_average"
-            android:layout_width="wrap_content"
-            android:layout_height="40sp"
-            android:layout_gravity="center"
-            android:onClick="showPopupMenu"
-            android:text="@string/ave"
-            android:textSize="18sp" />
-        <Button
-            android:id="@+id/button_set_cursor_freq"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/button_button_height"
-            android:layout_gravity="center"
-            android:onClick="showCursorFreqPopup"
-            android:text="@string/button_freq_freq"
-            android:textSize="@dimen/button_text_fontsize" />
+
     </LinearLayout>
 
 </LinearLayout>

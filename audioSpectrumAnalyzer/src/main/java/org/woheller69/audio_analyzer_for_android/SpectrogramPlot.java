@@ -77,6 +77,7 @@ class SpectrogramPlot {
 
         cursorPaint = new Paint(gridPaint);
         cursorPaint.setColor(Color.parseColor("#00CD00"));
+        cursorPaint.setStrokeWidth(2);
 
         cursorTimePaint = new Paint(cursorPaint);
         cursorTimePaint.setStyle(Paint.Style.STROKE);
