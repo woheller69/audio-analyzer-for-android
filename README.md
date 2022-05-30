@@ -5,6 +5,8 @@ Audio Spectrum Analyzer for Android
 
   This software shows the frequency components' magnitude distribution (called spectrum) of the sound heard by your cell phone. Can be used to help tuning musical instrument or tone in singing, (tentative) measure environmental noise and sound revent education or experiments.
 
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01.png" width="150"/> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.png" width="150"/> 
+
   <a href="https://f-droid.org/packages/org.woheller69.audio-analyzer-for-android"><img alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="100"></a>
 
 
@@ -35,7 +37,8 @@ License
 This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio-analyzer-for-android), is released under the Apache License, Version 2.0.
 
 
-### Code structure
+Code structure
+--------------
 
 The whole program structure is roughly follows the MVC model: 
 
