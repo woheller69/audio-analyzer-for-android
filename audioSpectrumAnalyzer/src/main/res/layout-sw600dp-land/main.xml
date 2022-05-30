@@ -48,18 +48,16 @@
             android:text="@string/textview_peak_text"
             android:typeface="monospace" />
 
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/textview_cur"
-            android:layout_toRightOf="@+id/textview_cur">
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true">
+
                 <Button
                     android:id="@+id/button_sample_rate"
                     android:layout_width="wrap_content"
@@ -95,8 +93,6 @@
                     android:text="@string/button_freq_freq"
                     android:textSize="18sp" />
             </LinearLayout>
-
-        </HorizontalScrollView>
 
     </RelativeLayout>
 
