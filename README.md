@@ -5,9 +5,7 @@ Audio Spectrum Analyzer for Android
 
   This software shows the frequency components' magnitude distribution (called spectrum) of the sound heard by your cell phone. Can be used to help tuning musical instrument or tone in singing, (tentative) measure environmental noise and sound revent education or experiments.
 
-  You can install this app through **Google Play Store**: [Audio Spectrum Analyzer](https://play.google.com/store/apps/details?id=github.bewantbe.audio_analyzer_for_android). Comments are welcome.
-
-  This software, [Audio Spectrum Analyzer for Android](https://github.com/bewantbe/audio-analyzer-for-android), is released under the Apache License, Version 2.0.
+  <a href="https://f-droid.org/packages/org.woheller69.audio-analyzer-for-android"><img alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="100"></a>
 
 
 Features
@@ -25,26 +23,17 @@ Features
 * Support all possible sampling rates that your phone is capable. e.g. useful to find out the native (or best) sampling format for you phone.
 
 
-Installation Requirements
+Permissions
 -------------------------
 
-* Android version (API level)
-  - \>= Android 2.2 (API level 8), up-to app version v1.6.8. 
-  - \>= Android 2.3 (API level 9), master branch, up-to year 2017.
-  - \>= Android 4.0 (API level 14), since year 2018.
-  - These minimum version requirement is due to the "targetSdkVersion" and corresponding supported version range for library "com.android.support:support-v4".
-
-Permissions:
 * Microphone, of course.
 * External storage (e.g MicroSD card), if you want to record the sound.
 
+License
+--------
 
-Development
------------
+This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio-analyzer-for-android), is released under the Apache License, Version 2.0.
 
-`git clone` then open it use Android Studio. Install the SDK platform if requested (e.g. rev 116 needs API level 20), or tune the `compileSdkVersion` to the value that fits your needs.
-
-([Notes on project import for old revision (rev <= 115)](doc/Notes-on-project-import-for-old-revision.txt))
 
 ### Code structure
 
@@ -74,9 +63,4 @@ which calculates RMS and FFT whenever enough data is collected. The view is then
     activity.analyzerViews.update(spectrumDBcopy);
 
 which ultimately calls `invalidate()` of the graphic view to request an update, then the `AnalyzerGraphic.onDraw(Canvas c)` will be called automatically.
-
-Thanks
-------
-
-The code [Audio spectrum Analyzer for Android](https://code.google.com/p/audio-analyzer-for-android/) gives me a good starting point, for learning Java and write this software (that I desired long ago).
 
