@@ -15,7 +15,6 @@
 
 package org.woheller69.audio_analyzer_for_android;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -26,10 +25,9 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
-import androidx.annotation.NonNull;
 import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -41,6 +39,9 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * Operate the views in the UI here.

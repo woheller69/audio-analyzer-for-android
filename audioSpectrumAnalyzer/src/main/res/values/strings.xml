@@ -118,5 +118,9 @@
     <string name="preference_developerSetting">Developer Settings</string>
     <string name="preference_spectrogramLogPlotMethod_1">Replot spectrogram only while zooming (Saves battery)</string>
     <string name="preference_spectrogramLogPlotMethod_2">Log plot: Replot on zoom</string>
-
+    <string name="dialog_OK_button">OK</string>
+    <string name="dialog_NO_button">NO</string>
+    <string name="dialog_Later_button">Maybe later</string>
+    <string name="dialog_StarOnGitHub">Do you like this app? Please star it on GitHub!</string>
+    <string name="about">About</string>
 </resources>

@@ -1,12 +1,13 @@
 package org.woheller69.audio_analyzer_for_android;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.text.DecimalFormat;
 

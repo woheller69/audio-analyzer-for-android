@@ -16,22 +16,24 @@
 package org.woheller69.audio_analyzer_for_android;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.app.NavUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
 import java.util.ArrayList;
 
 // Test all (including unknown) recorder sources by open it and read data.
 
-public class InfoRecActivity extends Activity {
+public class InfoRecActivity extends AppCompatActivity {
 	private AnalyzerUtil analyzerUtil;
 	private CharSequence testResultSt = null;
 
@@ -52,13 +54,13 @@ public class InfoRecActivity extends Activity {
 	}
 
 	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
+	 * Set up the {@link ActionBar}, if the API is available.
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			if (getActionBar() != null)
-				getActionBar().setDisplayHomeAsUpEnabled(true);
+			if (getSupportActionBar() != null)
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 	}
 

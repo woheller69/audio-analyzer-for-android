@@ -41,4 +41,13 @@
         android:title="Load calibration"
         android:titleCondensed="calib"/>
 
+    <item
+        android:id="@+id/menu_github"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:onClick="openGithub"
+        android:menuCategory="container"
+        android:title="@string/about"
+        android:titleCondensed="calib"/>
+
 </menu>

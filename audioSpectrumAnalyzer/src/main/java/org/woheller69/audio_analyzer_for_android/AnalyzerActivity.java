@@ -22,7 +22,6 @@
 package org.woheller69.audio_analyzer_for_android;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,10 +32,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GestureDetectorCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -49,18 +44,24 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GestureDetectorCompat;
 
 /**
  * Audio "FFT" analyzer.
  * @author suhler@google.com (Stephen Uhler)
  */
 
-public class AnalyzerActivity extends Activity
+public class AnalyzerActivity extends AppCompatActivity
     implements OnLongClickListener, OnClickListener,
                OnItemClickListener, AnalyzerGraphic.Ready
 {
@@ -119,6 +120,8 @@ public class AnalyzerActivity extends Activity
         setCursorFreqDialog = new SetCursorFreqDialog(this, analyzerViews.graphView);
 
         mDetector = new GestureDetectorCompat(this, new AnalyzerGestureListener());
+
+        if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(this,"https://github.com/woheller69/audio-analyzer-for-android");
     }
 
     /**
@@ -239,6 +242,7 @@ public class AnalyzerActivity extends Activity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CALIB_LOAD && resultCode == RESULT_OK) {
             final Uri uri = data.getData();
             calibLoad.loadFile(uri, this);
@@ -488,6 +492,10 @@ public class AnalyzerActivity extends Activity
 
     public void showCursorFreqPopup(View view) {
         setCursorFreqDialog.ShowSetCursorFreqDialog();
+    }
+
+    public void openGithub(MenuItem item) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/woheller69/audio-analyzer-for-android")));
     }
 
     /**
@@ -804,6 +812,7 @@ public class AnalyzerActivity extends Activity
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_RECORD_AUDIO: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

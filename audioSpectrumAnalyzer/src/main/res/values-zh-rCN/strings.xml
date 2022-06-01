@@ -113,5 +113,13 @@
     <string name="preference_developerSetting">开发者选项</string>
     <string name="preference_spectrogramLogPlotMethod_1">放缩时重绘，较为节省电池，否则是每次重绘。</string>
     <string name="preference_spectrogramLogPlotMethod_2">对数轴绘制方法: 放缩时重绘</string>
+    <string name="dialog_OK_button">OK</string>
+    <string name="dialog_NO_button">NO</string>
+    <string name="dialog_Later_button">Maybe later</string>
+    <string name="dialog_StarOnGitHub">Do you like this app? Please star it on GitHub!</string>
+    <string name="about">About</string>
+    <string name="button_freq_freq">Curs</string>
+    <string name="set_cursor_freq_dialog_title">Set cursor freq [Hz]</string>
+    <string name="set_cursor_freq_hint">freq [Hz]</string>
 
 </resources>

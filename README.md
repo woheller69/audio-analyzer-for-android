@@ -34,7 +34,9 @@ Permissions
 License
 --------
 
-This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio-analyzer-for-android), is released under the Apache License, Version 2.0.
+This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio_analyzer_for_android), is released under the Apache License, Version 2.0.
+
+Copyright @thinkingcow, @bewantbe, @woheller69 
 
 
 Code structure

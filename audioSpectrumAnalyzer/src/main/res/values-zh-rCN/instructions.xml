@@ -93,10 +93,10 @@
 \u2022 掉帧的情况是可能出现的，比如采样率设为 48kHz，FFT长度设为 1024 时，刷新率是 (采样率/FFT长度)*2 = 48000 / 1024 * 2 = <b>93.75</b> FPS，这对于移动设备来说太高了，掉帧在所难免。
 <br/><br/>
 </p>
-<a href="https://github.com/bewantbe/audio-analyzer-for-android/wiki/Privacy-Policy">隐私政策</a>
+<a href="https://github.com/woheller69/audio-analyzer-for-android/PRIVACY.md">隐私政策</a>
 <br/><br/>
 </p>
-by S A Uhler and xyy
+
 </p>
 ]]></string>
 

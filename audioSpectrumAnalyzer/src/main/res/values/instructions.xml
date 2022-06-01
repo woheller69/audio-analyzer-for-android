@@ -100,10 +100,10 @@ It is recommended to use <b>Hanning</b> for general purpose.
 \u2022 This software will drop frames when the specified sample rate is too high. For example, a sampling rate (<b>SAMPLE/S</b>) of 48000, with FFT length (<b>FFT LEN</b>) set to 1024 results in a frame rate per second (fps) equal to:<br/> (SAMPLES/LENGTH)*2 = 48000 / 1024 * 2 = (<b>93.75</b>) fps, which is far too high for a mobile device.
 <br/><br/>
 </p>
-<a href="https://github.com/bewantbe/audio-analyzer-for-android/wiki/Privacy-Policy">Privacy Policy</a>
+<a href="https://github.com/woheller69/audio-analyzer-for-android/PRIVACY.md">Privacy Policy</a>
 <br/><br/>
 </p>
-by S A Uhler and xyy
+
 </p>
 ]]></string>
 
