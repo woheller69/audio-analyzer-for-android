@@ -10,7 +10,7 @@ If you leave comment in the Google play store of this app, we will be noticed an
 
 ## Data processing
 
-The permission to read microphone is required because that't the essential data that this app required to compute and display the spectrum and spectrogram.
+The permission to read microphone is required because that is the essential data that this app requires to compute and display the spectrum and spectrogram.
 
 The permission to read and write storage is for saving microphone data (in WAV PCM format) only and is optional. This is provided for convenience of user (e.g. user might want to use another app to process the recorded data). It is user's responsibility to remove the recorded data if they are no longer needed. The files are located at "/Recorder/".
 
@@ -21,17 +21,3 @@ This Privacy Policy won't change often, and there is no plan to change in the ne
 
 If there are changes, user will be noticed by the update notice of this app.
 
-
-***
-
-2017-3-14
-
-Eddy Xiao and other contributors of Audio Spectrum Analyzer for Android
-
-Project home page:
-
-https://github.com/bewantbe/audio-analyzer-for-android
-
-Play Store:
-
-https://play.google.com/store/apps/details?id=github.bewantbe.audio_analyzer_for_android
