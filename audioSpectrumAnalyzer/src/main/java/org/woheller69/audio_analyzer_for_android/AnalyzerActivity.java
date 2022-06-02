@@ -355,7 +355,7 @@ public class AnalyzerActivity extends AppCompatActivity
                 b_need_restart_audio = false;
         }
 
-        editor.commit();
+        editor.apply();
 
         if (b_need_restart_audio) {
             restartSampling(analyzerParam);
@@ -892,7 +892,7 @@ public class AnalyzerActivity extends AppCompatActivity
                 Log.d(TAG, "processClick(): freq_scaling_mode = " + value);
                 analyzerViews.graphView.setAxisModeLinear(value);
                 editor.putString("freq_scaling_mode", value);
-                editor.commit();
+                editor.apply();
                 return false;
             }
             case R.id.dbA:
@@ -901,7 +901,7 @@ public class AnalyzerActivity extends AppCompatActivity
                     samplingThread.setAWeighting(analyzerParam.isAWeighting);
                 }
                 editor.putBoolean("dbA", analyzerParam.isAWeighting);
-                editor.commit();
+                editor.apply();
                 return false;
             case R.id.spectrum_spectrogram_mode:
                 if (value.equals("spum")) {
@@ -910,7 +910,7 @@ public class AnalyzerActivity extends AppCompatActivity
                     analyzerViews.graphView.switch2Spectrogram();
                 }
                 editor.putBoolean("spectrum_spectrogram_mode", value.equals("spum"));
-                editor.commit();
+                editor.apply();
                 return false;
             default:
                 return true;

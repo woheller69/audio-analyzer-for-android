@@ -196,6 +196,6 @@ class RangeViewDialogC {
             AnalyzerUtil.putDouble(editor, "view_range_rr_" + i, rr[i]);  // no editor.putDouble ? kidding me?
         }
         editor.putBoolean("view_range_lock", isLock);
-        editor.commit();
+        editor.apply();
     }
 }

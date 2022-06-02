@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="DarkThemeSelector" parent="@style/Theme.AppCompat">
-        <!--<item name="windowActionBar">false</item>-->
-        <!--<item name="windowNoTitle">true</item>-->
-    </style>
+    <style name="DarkThemeSelector" parent="@style/Theme.AppCompat"></style>
 </resources>

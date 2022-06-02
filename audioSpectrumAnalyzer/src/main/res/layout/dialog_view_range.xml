@@ -87,7 +87,7 @@
         android:inputType="numberDecimal|numberSigned"
         android:hint="@string/et_db_setting_upper_bound" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_below="@+id/et_db_setting_upper_bound"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
