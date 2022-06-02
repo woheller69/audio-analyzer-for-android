@@ -7,7 +7,7 @@ Audio Spectrum Analyzer for Android
 
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01.png" width="150"/> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.png" width="150"/> 
 
-  <a href="https://f-droid.org/packages/org.woheller69.audio-analyzer-for-android"><img alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="100"></a>
+  <a href="https://f-droid.org/packages/org.woheller69.audio_analyzer_for_android"><img alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="100"></a>
 
 
 Features
@@ -52,7 +52,7 @@ License
 
 This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio_analyzer_for_android), is released under the Apache License, Version 2.0.
 
-Copyright @thinkingcow, @bewantbe, @woheller69 
+Copyright [thinkingcow](https://github.com/thinkingcow), [bewantbe](https://github.com/bewantbe), [woheller69](https://github.com/woheller69)
 
 
 Code structure
