@@ -15,12 +15,16 @@
 
 package org.woheller69.audio_analyzer_for_android;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.audiofx.AutomaticGainControl;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 import java.util.Arrays;
 
@@ -61,11 +65,11 @@ class SamplingLoop extends Thread {
         isPaused1 = ((SelectorText) activity.findViewById(R.id.run)).getValue().equals("stop");
         // Signal sources for testing
         double fq0 = Double.parseDouble(activity.getString(R.string.test_signal_1_freq1));
-        double amp0 = Math.pow(10, 1/20.0 * Double.parseDouble(activity.getString(R.string.test_signal_1_db1)));
+        double amp0 = Math.pow(10, 1 / 20.0 * Double.parseDouble(activity.getString(R.string.test_signal_1_db1)));
         double fq1 = Double.parseDouble(activity.getString(R.string.test_signal_2_freq1));
-        double amp1 = Math.pow(10, 1/20.0 * Double.parseDouble(activity.getString(R.string.test_signal_2_db1)));
+        double amp1 = Math.pow(10, 1 / 20.0 * Double.parseDouble(activity.getString(R.string.test_signal_2_db1)));
         double fq2 = Double.parseDouble(activity.getString(R.string.test_signal_2_freq2));
-        double amp2 = Math.pow(10, 1/20.0 * Double.parseDouble(activity.getString(R.string.test_signal_2_db2)));
+        double amp2 = Math.pow(10, 1 / 20.0 * Double.parseDouble(activity.getString(R.string.test_signal_2_db2)));
         if (analyzerParam.audioSourceId == 1000) {
             sineGen1 = new SineGenerator(fq0, analyzerParam.sampleRate, analyzerParam.SAMPLE_VALUE_MAX * amp0);
         } else {
@@ -122,14 +126,14 @@ class SamplingLoop extends Thread {
                 break;
             case 2:
                 for (int i = 0; i < sizeInShorts; i++) {
-                    a[i] = (short) (analyzerParam.SAMPLE_VALUE_MAX * (2.0*Math.random() - 1));
+                    a[i] = (short) (analyzerParam.SAMPLE_VALUE_MAX * (2.0 * Math.random() - 1));
                 }
                 break;
             default:
                 Log.w(TAG, "readTestData(): No this source id = " + analyzerParam.audioSourceId);
         }
         // Block this thread, so that behave as if read from real device.
-        LimitFrameRate(1000.0*sizeInShorts / analyzerParam.sampleRate);
+        LimitFrameRate(1000.0 * sizeInShorts / analyzerParam.sampleRate);
         return sizeInShorts;
     }
 
@@ -163,17 +167,27 @@ class SamplingLoop extends Thread {
              inferior to the total recording buffer size.
          */
         // Determine size of buffers for AudioRecord and AudioRecord::read()
-        int readChunkSize    = analyzerParam.hopLen;  // Every hopLen one fft result (overlapped analyze window)
-        readChunkSize        = Math.min(readChunkSize, 2048);  // read in a smaller chunk, hopefully smaller delay
-        int bufferSampleSize = Math.max(minBytes / analyzerParam.BYTE_OF_SAMPLE, analyzerParam.fftLen/2) * 2;
+        int readChunkSize = analyzerParam.hopLen;  // Every hopLen one fft result (overlapped analyze window)
+        readChunkSize = Math.min(readChunkSize, 2048);  // read in a smaller chunk, hopefully smaller delay
+        int bufferSampleSize = Math.max(minBytes / analyzerParam.BYTE_OF_SAMPLE, analyzerParam.fftLen / 2) * 2;
         // tolerate up to about 1 sec.
-        bufferSampleSize = (int)Math.ceil(1.0 * analyzerParam.sampleRate / bufferSampleSize) * bufferSampleSize;
+        bufferSampleSize = (int) Math.ceil(1.0 * analyzerParam.sampleRate / bufferSampleSize) * bufferSampleSize;
 
         // Use the mic with AGC turned off. e.g. VOICE_RECOGNITION for measurement
         // The buffer size here seems not relate to the delay.
         // So choose a larger size (~1sec) so that overrun is unlikely.
         try {
             if (analyzerParam.audioSourceId < 1000) {
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
                 record = new AudioRecord(analyzerParam.audioSourceId, analyzerParam.sampleRate, AudioFormat.CHANNEL_IN_MONO,
                         AudioFormat.ENCODING_PCM_16BIT, analyzerParam.BYTE_OF_SAMPLE * bufferSampleSize);
             } else {
@@ -191,7 +205,7 @@ class SamplingLoop extends Thread {
             if (AutomaticGainControl.isAvailable()) {
                 AutomaticGainControl agc = AutomaticGainControl.create(
                         record.getAudioSessionId());
-                if (agc.getEnabled())
+                if (agc!=null && agc.getEnabled())
                     Log.i(TAG, "SamplingLoop::Run(): AGC: enabled.");
                 else
                     Log.i(TAG, "SamplingLoop::Run(): AGC: disabled.");
