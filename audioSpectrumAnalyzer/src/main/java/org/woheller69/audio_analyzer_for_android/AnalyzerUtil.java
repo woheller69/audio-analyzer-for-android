@@ -15,6 +15,7 @@
 
 package org.woheller69.audio_analyzer_for_android;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioFormat;
@@ -121,6 +122,7 @@ class AnalyzerUtil {
      * Return a array of verified audio sampling rates.
      * @param requested: the sampling rates to be verified
      */
+    @SuppressLint("MissingPermission")
     static String[] validateAudioRates(String[] requested) {
         ArrayList<String> validated = new ArrayList<>();
         for (String s : requested) {
