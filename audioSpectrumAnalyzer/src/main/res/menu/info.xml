@@ -42,6 +42,15 @@
         android:titleCondensed="calib"/>
 
     <item
+        android:id="@+id/menu_privacy"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:onClick="openPrivacyPolicy"
+        android:menuCategory="container"
+        android:title="@string/privacy_policy"
+        android:titleCondensed="calib"/>
+
+    <item
         android:id="@+id/menu_github"
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_manage"

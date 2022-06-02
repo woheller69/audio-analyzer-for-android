@@ -498,6 +498,10 @@ public class AnalyzerActivity extends AppCompatActivity
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/woheller69/audio-analyzer-for-android")));
     }
 
+    public void openPrivacyPolicy(MenuItem item) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/woheller69/audio-analyzer-for-android#Privacy")));
+    }
+
     /**
      * Gesture Listener for graphView (and possibly other views)
      * How to attach these events to the graphView?

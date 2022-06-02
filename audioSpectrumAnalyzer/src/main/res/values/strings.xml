@@ -123,4 +123,5 @@
     <string name="dialog_Later_button">Maybe later</string>
     <string name="dialog_StarOnGitHub">Do you like this app? Please star it on GitHub!</string>
     <string name="about">About</string>
+    <string name="privacy_policy">Privacy policy</string>
 </resources>
