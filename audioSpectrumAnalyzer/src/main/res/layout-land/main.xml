@@ -60,10 +60,11 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <Button
                     android:id="@+id/button_sample_rate"
+                    android:paddingVertical="@dimen/button_vertical_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="40sp"
                     android:layout_gravity="center"
@@ -73,6 +74,7 @@
 
                 <Button
                     android:id="@+id/button_fftlen"
+                    android:paddingVertical="@dimen/button_vertical_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="40sp"
                     android:layout_gravity="center"
@@ -82,6 +84,7 @@
 
                 <Button
                     android:id="@+id/button_average"
+                    android:paddingVertical="@dimen/button_vertical_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="40sp"
                     android:layout_gravity="center"
@@ -90,6 +93,7 @@
                     android:textSize="18sp" />
                 <Button
                     android:id="@+id/button_set_cursor_freq"
+                    android:paddingVertical="@dimen/button_vertical_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/button_button_height"
                     android:layout_gravity="center"

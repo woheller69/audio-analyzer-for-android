@@ -7,6 +7,7 @@
     <dimen name="textview_RMS_layout_width">60dp</dimen>
     <dimen name="button_button_height">40sp</dimen>
     <dimen name="button_text_fontsize">20sp</dimen>
+    <dimen name="button_vertical_padding">5sp</dimen>
     <dimen name="button_text_small_fontsize">12sp</dimen>
 
 </resources>
