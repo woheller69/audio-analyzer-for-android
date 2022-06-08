@@ -281,7 +281,7 @@ class STFT {
             }
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
             int N=Integer.parseInt(sharedPref.getString("zeroPadding","0")); //Zero padding level
-            Log.d("ZeroPadding",Integer.toString(N));
+
             if (spectrumAmpPt == inLen) {    // enough data for one FFT
                 for (int i = 0; i < inLen; i++) {
                     if (i<inLen/Math.pow(2,N))

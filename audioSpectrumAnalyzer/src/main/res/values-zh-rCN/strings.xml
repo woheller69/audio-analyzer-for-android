@@ -124,5 +124,6 @@
     <string name="set_cursor_freq_dialog_title">Set cursor freq [Hz]</string>
     <string name="set_cursor_freq_hint">freq [Hz]</string>
     <string name="privacy_policy">隐私政策</string>
+    <string name="preference_experimental">Experimental</string>
 
 </resources>
