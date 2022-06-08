@@ -20,11 +20,12 @@
 
         <TextView
             android:id="@+id/textview_RMS"
-            android:layout_width="60dp"
+            android:layout_width="@dimen/textview_RMS_layout_width"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:lines="2"
+            android:lineSpacingExtra="3sp"
             android:text="@string/textview_RMS_text"
             android:typeface="monospace" />
 

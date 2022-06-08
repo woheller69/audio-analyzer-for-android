@@ -25,6 +25,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:lines="2"
+            android:lineSpacingExtra="3sp"
             android:text="@string/textview_RMS_text"
             android:typeface="monospace" />
 
