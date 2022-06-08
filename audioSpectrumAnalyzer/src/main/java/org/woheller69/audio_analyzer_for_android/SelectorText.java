@@ -112,8 +112,8 @@ public class SelectorText extends AppCompatTextView {
   @Override
   protected void onDraw(Canvas c) {
     super.onDraw(c);
-    c.drawRoundRect(rect, r, r, paint);
-    c.drawRoundRect(bgRect, r, r, bg);
+    //c.drawRoundRect(rect, r, r, paint);
+    c.drawRoundRect(bgRect, r, r, paint);
   }
   
   /**

@@ -17,6 +17,9 @@ package org.woheller69.audio_analyzer_for_android;
 
 import java.util.Arrays;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.corp.productivity.specialprojects.android.fft.RealDoubleFFT;
@@ -254,11 +257,8 @@ class STFT {
         }
     }
 
-    public void feedData(short[] ds) {
-      feedData(ds, ds.length);
-    }
 
-    void feedData(short[] ds, int dsLen) {
+    public void feedData(Context context, short[] ds, int dsLen) {
         if (dsLen > ds.length) {
             Log.e("STFT", "dsLen > ds.length !");
             dsLen = ds.length;
@@ -279,9 +279,15 @@ class STFT {
                 cumRMS += s*s;
                 cntRMS++;
             }
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+            int N=Integer.parseInt(sharedPref.getString("zeroPadding","0")); //Zero padding level
+            Log.d("ZeroPadding",Integer.toString(N));
             if (spectrumAmpPt == inLen) {    // enough data for one FFT
                 for (int i = 0; i < inLen; i++) {
-                    spectrumAmpInTmp[i] = spectrumAmpIn[i] * wnd[i];
+                    if (i<inLen/Math.pow(2,N))
+                    spectrumAmpInTmp[i] = spectrumAmpIn[i] * wnd[i]*Math.pow(2,N);
+                    else
+                        spectrumAmpInTmp[i] = 0;
                 }
                 spectrumAmpFFT.ft(spectrumAmpInTmp);
                 fftToAmp(spectrumAmpOutTmp, spectrumAmpInTmp);

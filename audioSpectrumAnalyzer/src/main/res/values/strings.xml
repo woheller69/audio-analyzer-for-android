@@ -18,11 +18,11 @@
     <string name="sample_rates_name">SAMPLE/S::0</string>
     <string name="fft_len_name">FFT LEN::0</string>
     <string name="fft_ave_num_name">N AVE::0</string>
-    <string name="button_freq_scaling_mode">linear::log::note</string>
-    <string name="button_run">run::stop</string>
+    <string name="button_freq_scaling_mode">LINEAR::LOG::NOTE</string>
+    <string name="button_run">RUN::STOP</string>
     <string name="button_dbA">dB::dBA</string>
     <string name="button_spectrum_spectrogram_mode">1D::2D</string>
-    <string name="button_recording">Mon::Rec</string>
+    <string name="button_recording">MON::REC</string>
     <string name="button_freq_freq">Curs</string>
 
     <!-- permission dialog -->
@@ -118,6 +118,8 @@
     <string name="preference_developerSetting">Developer Settings</string>
     <string name="preference_spectrogramLogPlotMethod_1">Replot spectrogram only while zooming (Saves battery)</string>
     <string name="preference_spectrogramLogPlotMethod_2">Log plot: Replot on zoom</string>
+    <string name="preference_zeropadding_summary">Take fewer samples and fill up with zeros</string>
+    <string name="preference_zeropadding_title">Zero Padding Level</string>
     <string name="dialog_OK_button">OK</string>
     <string name="dialog_NO_button">NO</string>
     <string name="dialog_Later_button">Maybe later</string>

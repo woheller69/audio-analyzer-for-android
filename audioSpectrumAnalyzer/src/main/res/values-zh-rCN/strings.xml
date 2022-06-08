@@ -113,6 +113,8 @@
     <string name="preference_developerSetting">开发者选项</string>
     <string name="preference_spectrogramLogPlotMethod_1">放缩时重绘，较为节省电池，否则是每次重绘。</string>
     <string name="preference_spectrogramLogPlotMethod_2">对数轴绘制方法: 放缩时重绘</string>
+    <string name="preference_zeropadding_summary">Takes less samples and fills up with zeros</string>
+    <string name="preference_zeropadding_title">Zero Padding Level</string>
     <string name="dialog_OK_button">OK</string>
     <string name="dialog_NO_button">NO</string>
     <string name="dialog_Later_button">Maybe later</string>

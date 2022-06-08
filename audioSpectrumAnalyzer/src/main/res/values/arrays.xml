@@ -50,6 +50,22 @@
         <item>40</item>
         <item>60</item>
     </string-array>
+
+    <string name="zeropadding_default" translatable="false">0</string>
+    <string-array name="zeropadding_array" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="zeropadding_array_strings" translatable="false">
+        <item>Off</item>
+        <item>2x</item>
+        <item>4x</item>
+        <item>8x</item>
+    </string-array>
+
     <string name="wnd_func_default" translatable="false">Hanning</string>
     <string-array name="wnd_func_names" translatable="false">
         <item>Rectangular</item>

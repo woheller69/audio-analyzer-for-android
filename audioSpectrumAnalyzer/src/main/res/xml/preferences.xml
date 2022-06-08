@@ -113,6 +113,13 @@
             android:key="warnOverrun"
             android:summary="@string/preference_warnOverrun_1"
             android:title="@string/preference_warnOverrun_2" />
+        <ListPreference
+            android:defaultValue="@string/zeropadding_default"
+            android:entries="@array/zeropadding_array_strings"
+            android:entryValues="@array/zeropadding_array"
+            android:key="zeroPadding"
+            android:summary="@string/preference_zeropadding_summary"
+            android:title="@string/preference_zeropadding_title" />
     </PreferenceCategory>
 
     <PreferenceCategory

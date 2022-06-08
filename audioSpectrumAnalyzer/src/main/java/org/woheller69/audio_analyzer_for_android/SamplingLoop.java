@@ -291,7 +291,7 @@ class SamplingLoop extends Thread {
                 continue;
             }
 
-            stft.feedData(audioSamples, numOfReadShort);
+            stft.feedData(activity.getApplicationContext(), audioSamples, numOfReadShort);
 
             // If there is new spectrum data, do plot
             if (stft.nElemSpectrumAmp() >= analyzerParam.nFFTAverage) {
