@@ -64,7 +64,7 @@ class SpectrumPlot {
         gridPaint = new Paint();
         gridPaint.setColor(Color.DKGRAY);
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setStrokeWidth(0.6f * DPRatio);
+        gridPaint.setStrokeWidth(1.0f * DPRatio);
 
         cursorPaint = new Paint(gridPaint);
         cursorPaint.setColor(Color.parseColor("#00CD00"));
