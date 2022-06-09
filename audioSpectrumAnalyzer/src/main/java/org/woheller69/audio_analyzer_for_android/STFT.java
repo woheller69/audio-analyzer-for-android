@@ -300,10 +300,10 @@ class STFT {
                     spectrumAmpOutCum[i] += spectrumAmpOutTmp[i];
                 }
                 nAnalysed++;
-                if (hopLen < fftLen) {
-                    System.arraycopy(spectrumAmpIn, hopLen, spectrumAmpIn, 0, fftLen - hopLen);
+                if (hopLen/Math.pow(2,zpl) < fftLen) {
+                    System.arraycopy(spectrumAmpIn, (int) (hopLen/Math.pow(2,zpl)), spectrumAmpIn, 0, (int) (fftLen - hopLen/Math.pow(2,zpl)));
                 }
-                spectrumAmpPt = fftLen - hopLen;  // can be positive and negative
+                spectrumAmpPt = (int) (fftLen - hopLen/Math.pow(2,zpl));  // can be positive and negative
             }
         }
     }
