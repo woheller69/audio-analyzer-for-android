@@ -45,6 +45,7 @@ class STFT {
     private double[] spectrumAmpIn;
     private double[] spectrumAmpInTmp;
     private double[] wnd;
+    private int zpl; //zero padding level;
     private double wndEnergyFactor = 1;           // used to keep energy invariant under different window
     private int sampleRate;
     private int fftLen;
@@ -280,12 +281,13 @@ class STFT {
                 cntRMS++;
             }
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-            int N=Integer.parseInt(sharedPref.getString("zeroPadding","0")); //Zero padding level
+            zpl=Integer.parseInt(sharedPref.getString("zeroPadding","0")); //Zero padding level
 
             if (spectrumAmpPt == inLen) {    // enough data for one FFT
                 for (int i = 0; i < inLen; i++) {
-                    if (i<inLen/Math.pow(2,N))
-                    spectrumAmpInTmp[i] = spectrumAmpIn[i] * wnd[i]*Math.pow(2,N);
+                    if (i<inLen/Math.pow(2,zpl)) {
+                        spectrumAmpInTmp[i] = spectrumAmpIn[i] * wnd[(int) (i*Math.pow(2,zpl))] * Math.pow(2, zpl);
+                    }
                     else
                         spectrumAmpInTmp[i] = 0;
                 }
@@ -367,7 +369,7 @@ class STFT {
         for (int i = 1; i < spectrumAmpOut.length; i++) {
             s += spectrumAmpOut[i];
         }
-        return sqrt(s * wndEnergyFactor);
+        return sqrt(s * wndEnergyFactor/ Math.pow(2, zpl)); //correct for zero padding level
     }
 
     int nElemSpectrumAmp() {
