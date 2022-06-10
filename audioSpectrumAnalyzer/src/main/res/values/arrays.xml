@@ -51,12 +51,12 @@
         <item>60</item>
     </string-array>
 
-    <string name="zeropadding_default" translatable="false">0</string>
+    <string name="zeropadding_default" translatable="false">1</string>
     <string-array name="zeropadding_array" translatable="false">
-        <item>0</item>
         <item>1</item>
         <item>2</item>
-        <item>3</item>
+        <item>4</item>
+        <item>8</item>
     </string-array>
 
     <string-array name="zeropadding_array_strings" translatable="false">

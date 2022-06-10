@@ -234,7 +234,7 @@ class SamplingLoop extends Thread {
         short[] audioSamples = new short[readChunkSize];
         int numOfReadShort;
 
-        stft = new STFT(analyzerParam);
+        stft = new STFT(activity.getApplicationContext(),analyzerParam);
         stft.setAWeighting(analyzerParam.isAWeighting);
         if (spectrumDBcopy == null || spectrumDBcopy.length != analyzerParam.fftLen/2+1) {
             spectrumDBcopy = new double[analyzerParam.fftLen/2+1];
@@ -291,7 +291,7 @@ class SamplingLoop extends Thread {
                 continue;
             }
 
-            stft.feedData(activity.getApplicationContext(), audioSamples, numOfReadShort);
+            stft.feedData(audioSamples, numOfReadShort);
 
             // If there is new spectrum data, do plot
             if (stft.nElemSpectrumAmp() >= analyzerParam.nFFTAverage) {

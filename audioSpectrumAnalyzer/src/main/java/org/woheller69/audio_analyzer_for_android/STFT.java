@@ -45,7 +45,7 @@ class STFT {
     private double[] spectrumAmpIn;
     private double[] spectrumAmpInTmp;
     private double[] wnd;
-    private int zpl; //zero padding level;
+    private int zeroPadFac = 1; //zero padding factor;
     private double wndEnergyFactor = 1;           // used to keep energy invariant under different window
     private int sampleRate;
     private int fftLen;
@@ -243,7 +243,9 @@ class STFT {
         boolAWeighting = false;
     }
 
-    STFT(AnalyzerParameters analyzerParam) {
+    STFT(Context context, AnalyzerParameters analyzerParam) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        zeroPadFac=Integer.parseInt(sharedPref.getString("zeroPadding",context.getString(R.string.zeropadding_default))); //Zero padding factor
         init(analyzerParam.fftLen, analyzerParam.hopLen, analyzerParam.sampleRate, analyzerParam.nFFTAverage, analyzerParam.wndFuncName);
         if (analyzerParam.micGainDB != null) {
             if (micGain == null || micGain.length != analyzerParam.micGainDB.length) {
@@ -259,7 +261,7 @@ class STFT {
     }
 
 
-    public void feedData(Context context, short[] ds, int dsLen) {
+    public void feedData(short[] ds, int dsLen) {
         if (dsLen > ds.length) {
             Log.e("STFT", "dsLen > ds.length !");
             dsLen = ds.length;
@@ -280,13 +282,12 @@ class STFT {
                 cumRMS += s*s;
                 cntRMS++;
             }
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-            zpl=Integer.parseInt(sharedPref.getString("zeroPadding","0")); //Zero padding level
+
 
             if (spectrumAmpPt == inLen) {    // enough data for one FFT
                 for (int i = 0; i < inLen; i++) {
-                    if (i<inLen/Math.pow(2,zpl)) {
-                        spectrumAmpInTmp[i] = spectrumAmpIn[i] * wnd[(int) (i*Math.pow(2,zpl))] * Math.pow(2, zpl); // in case of zero padding make jumps in window function so that the window is over the measured data. Multiply with factor to keep energy constant
+                    if (i<inLen/zeroPadFac) {
+                        spectrumAmpInTmp[i] = spectrumAmpIn[i] * wnd[(int) (i*zeroPadFac)] * zeroPadFac; // in case of zero padding make jumps in window function so that the window is over the measured data. Multiply with factor to keep energy constant
                     }
                     else
                         spectrumAmpInTmp[i] = 0;  //in case of zero padding only use a fraction of measured data and fill rest with zeros
@@ -300,10 +301,10 @@ class STFT {
                     spectrumAmpOutCum[i] += spectrumAmpOutTmp[i];
                 }
                 nAnalysed++;
-                if (hopLen/Math.pow(2,zpl) < fftLen) {  //Copy the remaining data that will be (re-)used to begin of array. In case of zero padding only consider the part not replaced with zeros as used
-                    System.arraycopy(spectrumAmpIn, (int) (hopLen/Math.pow(2,zpl)), spectrumAmpIn, 0, (int) (fftLen - hopLen/Math.pow(2,zpl)));
+                if (hopLen/zeroPadFac < fftLen) {  //Copy the remaining data that will be (re-)used to begin of array. In case of zero padding only consider the part not replaced with zeros as used
+                    System.arraycopy(spectrumAmpIn, hopLen/zeroPadFac, spectrumAmpIn, 0, fftLen - hopLen/zeroPadFac);
                 }
-                spectrumAmpPt = (int) (fftLen - hopLen/Math.pow(2,zpl));  // can be positive and negative
+                spectrumAmpPt = fftLen - hopLen/zeroPadFac;  // can be positive and negative
             }
         }
     }
@@ -369,7 +370,7 @@ class STFT {
         for (int i = 1; i < spectrumAmpOut.length; i++) {
             s += spectrumAmpOut[i];
         }
-        return sqrt(s * wndEnergyFactor/ Math.pow(2, zpl)); //correct for zero padding level
+        return sqrt(s * wndEnergyFactor/ zeroPadFac); //correct for zero padding level
     }
 
     int nElemSpectrumAmp() {
