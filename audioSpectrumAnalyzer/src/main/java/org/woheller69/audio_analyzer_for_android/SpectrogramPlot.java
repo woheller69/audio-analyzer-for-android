@@ -16,11 +16,13 @@
 package org.woheller69.audio_analyzer_for_android;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -47,6 +49,7 @@ class SpectrogramPlot {
     int nFreqPoints;  // TODO: a bit duplicated, use BMP.nFreq
     int nTimePoints;  // TODO: a bit duplicated, use BMP.nTime
     double timeInc;
+    int zeroPadFac = 1;
 
     private Matrix matrixSpectrogram = new Matrix();
     private Paint smoothBmpPaint;
@@ -61,7 +64,7 @@ class SpectrogramPlot {
     private GridLabel fqGridLabel;
     private GridLabel tmGridLabel;
     double cursorFreq;
-
+    private Context context;
     private float DPRatio;
     private float gridDensity = 1/85f;  // every 85 pixel one grid line, on average
     private int canvasHeight=0, canvasWidth=0;
@@ -69,7 +72,7 @@ class SpectrogramPlot {
 
     SpectrogramPlot(Context _context) {
         DPRatio = _context.getResources().getDisplayMetrics().density;
-
+        context = _context;
         gridPaint = new Paint();
         gridPaint.setColor(Color.DKGRAY);
         gridPaint.setStyle(Paint.Style.STROKE);
@@ -114,10 +117,11 @@ class SpectrogramPlot {
         int hopLen           = analyzerParam.hopLen;
         int nAve             = analyzerParam.nFFTAverage;
         double timeDurationE = analyzerParam.spectrogramDuration;
-
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        zeroPadFac=Integer.parseInt(sharedPref.getString("zeroPadding",context.getString(R.string.zeropadding_default))); //Zero padding factor
         timeWatch = timeDurationE;
         timeMultiplier = nAve;
-        timeInc     = (double)hopLen / sampleRate;  // time of each slice
+        timeInc     = (double)hopLen / sampleRate / zeroPadFac;  // time of each slice
         nFreqPoints = fftLen / 2;           // no direct current term
         nTimePoints = (int)Math.ceil(timeWatch / timeInc);
         spectrogramBMP.init(nFreqPoints, nTimePoints, axisFreq);
