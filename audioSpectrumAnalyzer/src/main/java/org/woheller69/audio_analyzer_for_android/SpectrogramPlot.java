@@ -16,13 +16,11 @@
 package org.woheller69.audio_analyzer_for_android;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**

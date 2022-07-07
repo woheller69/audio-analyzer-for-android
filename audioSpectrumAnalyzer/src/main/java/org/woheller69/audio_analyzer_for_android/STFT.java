@@ -17,9 +17,6 @@ package org.woheller69.audio_analyzer_for_android;
 
 import java.util.Arrays;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.corp.productivity.specialprojects.android.fft.RealDoubleFFT;
@@ -243,8 +240,7 @@ class STFT {
         boolAWeighting = false;
     }
 
-    STFT(Context context, AnalyzerParameters analyzerParam) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+    STFT(AnalyzerParameters analyzerParam) {
         zeroPadFac = analyzerParam.zeroPadFac;
         init(analyzerParam.fftLen, analyzerParam.hopLen, analyzerParam.sampleRate, analyzerParam.nFFTAverage, analyzerParam.wndFuncName);
         if (analyzerParam.micGainDB != null) {

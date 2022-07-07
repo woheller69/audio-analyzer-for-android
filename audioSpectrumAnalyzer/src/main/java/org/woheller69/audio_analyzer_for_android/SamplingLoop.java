@@ -234,7 +234,7 @@ class SamplingLoop extends Thread {
         short[] audioSamples = new short[readChunkSize];
         int numOfReadShort;
 
-        stft = new STFT(activity.getApplicationContext(),analyzerParam);
+        stft = new STFT(analyzerParam);
         stft.setAWeighting(analyzerParam.isAWeighting);
         if (spectrumDBcopy == null || spectrumDBcopy.length != analyzerParam.fftLen/2+1) {
             spectrumDBcopy = new double[analyzerParam.fftLen/2+1];
