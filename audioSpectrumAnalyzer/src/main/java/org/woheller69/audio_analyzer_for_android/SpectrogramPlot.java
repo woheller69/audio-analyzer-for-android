@@ -62,7 +62,6 @@ class SpectrogramPlot {
     private GridLabel fqGridLabel;
     private GridLabel tmGridLabel;
     double cursorFreq;
-    private Context context;
     private float DPRatio;
     private float gridDensity = 1/85f;  // every 85 pixel one grid line, on average
     private int canvasHeight=0, canvasWidth=0;
@@ -70,7 +69,6 @@ class SpectrogramPlot {
 
     SpectrogramPlot(Context _context) {
         DPRatio = _context.getResources().getDisplayMetrics().density;
-        context = _context;
         gridPaint = new Paint();
         gridPaint.setColor(Color.DKGRAY);
         gridPaint.setStyle(Paint.Style.STROKE);

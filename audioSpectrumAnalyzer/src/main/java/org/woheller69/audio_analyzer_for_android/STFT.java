@@ -211,7 +211,7 @@ class STFT {
         return boolAWeighting;
     }
 
-    private void init(int fftlen, int _hopLen, int sampleRate, int minFeedSize, String wndName) {
+    private void init(int fftlen, int _hopLen, int sampleRate, int minFeedSize, String wndName, int _zeroPadFac) {
         if (minFeedSize <= 0) {
             throw new IllegalArgumentException("STFT::init(): should minFeedSize >= 1.");
         }
@@ -221,6 +221,7 @@ class STFT {
         }
         this.sampleRate = sampleRate;
         fftLen = fftlen;
+        zeroPadFac = _zeroPadFac;
         hopLen = _hopLen;                          // 50% overlap by default
         spectrumAmpOutCum= new double[fftlen/2+1];
         spectrumAmpOutTmp= new double[fftlen/2+1];
@@ -241,8 +242,7 @@ class STFT {
     }
 
     STFT(AnalyzerParameters analyzerParam) {
-        zeroPadFac = analyzerParam.zeroPadFac;
-        init(analyzerParam.fftLen, analyzerParam.hopLen, analyzerParam.sampleRate, analyzerParam.nFFTAverage, analyzerParam.wndFuncName);
+        init(analyzerParam.fftLen, analyzerParam.hopLen, analyzerParam.sampleRate, analyzerParam.nFFTAverage, analyzerParam.wndFuncName, analyzerParam.zeroPadFac);
         if (analyzerParam.micGainDB != null) {
             if (micGain == null || micGain.length != analyzerParam.micGainDB.length) {
                 micGain = new double[analyzerParam.micGainDB.length];
