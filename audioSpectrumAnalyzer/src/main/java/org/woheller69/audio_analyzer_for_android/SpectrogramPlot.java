@@ -117,8 +117,7 @@ class SpectrogramPlot {
         int hopLen           = analyzerParam.hopLen;
         int nAve             = analyzerParam.nFFTAverage;
         double timeDurationE = analyzerParam.spectrogramDuration;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        zeroPadFac=Integer.parseInt(sharedPref.getString("zeroPadding",context.getString(R.string.zeropadding_default))); //Zero padding factor
+        zeroPadFac = analyzerParam.zeroPadFac;
         timeWatch = timeDurationE;
         timeMultiplier = nAve;
         timeInc     = (double)hopLen / sampleRate / zeroPadFac;  // time of each slice

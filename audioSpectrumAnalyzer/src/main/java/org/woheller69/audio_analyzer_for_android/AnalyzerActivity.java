@@ -409,6 +409,7 @@ public class AnalyzerActivity extends AppCompatActivity
         analyzerParam.spectrogramDuration = Double.parseDouble(sharedPref.getString("spectrogramDuration",
                 Double.toString(6.0)));
         analyzerParam.overlapPercent = Double.parseDouble(sharedPref.getString("fft_overlap_percent", "50.0"));
+        analyzerParam.zeroPadFac = Integer.parseInt(sharedPref.getString("zeroPadding",getString(R.string.zeropadding_default))); //Zero padding factor
         analyzerParam.hopLen = (int)(analyzerParam.fftLen*(1 - analyzerParam.overlapPercent/100) + 0.5);
 
         // Settings of graph view

@@ -245,7 +245,7 @@ class STFT {
 
     STFT(Context context, AnalyzerParameters analyzerParam) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        zeroPadFac=Integer.parseInt(sharedPref.getString("zeroPadding",context.getString(R.string.zeropadding_default))); //Zero padding factor
+        zeroPadFac = analyzerParam.zeroPadFac;
         init(analyzerParam.fftLen, analyzerParam.hopLen, analyzerParam.sampleRate, analyzerParam.nFFTAverage, analyzerParam.wndFuncName);
         if (analyzerParam.micGainDB != null) {
             if (micGain == null || micGain.length != analyzerParam.micGainDB.length) {
