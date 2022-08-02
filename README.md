@@ -85,3 +85,8 @@ which calculates RMS and FFT whenever enough data is collected. The view is then
 
 which ultimately calls `invalidate()` of the graphic view to request an update, then the `AnalyzerGraphic.onDraw(Canvas c)` will be called automatically.
 
+## Try my other apps
+
+| RadarWeather | Gas Prices | Smart Eggtimer | Level | hEARtest | GPS Cockpit | Audio Analyzer |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| [<img src="https://github.com/woheller69/weather/blob/main/fastlane/metadata/android/en-US/images/icon.png" height="80">](https://f-droid.org/packages/org.woheller69.weather/)| [<img src="https://github.com/woheller69/spritpreise/blob/main/fastlane/metadata/android/en-US/images/icon.png" height="80">](https://f-droid.org/packages/org.woheller69.spritpreise/) | [<img src="https://github.com/woheller69/eggtimer/blob/main/fastlane/metadata/android/en-US/images/icon.png" height="80">](https://f-droid.org/packages/org.woheller69.eggtimer/) | [<img src="https://github.com/woheller69/Level/blob/master/fastlane/metadata/android/en-US/images/icon.png" height="80">](https://f-droid.org/packages/org.woheller69.level/) | [<img src="https://github.com/woheller69/audiometry/blob/new/fastlane/metadata/android/en-US/images/icon.png" height="80">](https://f-droid.org/packages/org.woheller69.audiometry/) | [<img src="https://github.com/woheller69/gpscockpit/blob/master/fastlane/metadata/android/en-US/images/icon.png" height="80">](https://f-droid.org/packages/org.woheller69.gpscockpit/) | [<img src="https://github.com/woheller69/audio-analyzer-for-android/blob/master/fastlane/metadata/android/en-US/images/icon.png" height="80">](https://f-droid.org/packages/org.woheller69.audio_analyzer_for_android/) |
