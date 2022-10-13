@@ -261,6 +261,15 @@ public class AnalyzerActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(TAG, "onOptionsItemSelected(): " + item.toString());
         switch (item.getItemId()) {
+            case R.id.screenshot:
+                if (ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(AnalyzerActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                }
+                ScreenCapture.ScreenCapture(this);
+                return true;
             case R.id.menu_manual:
                 analyzerViews.showInstructions();
                 return true;

@@ -28,7 +28,6 @@
     <!-- permission dialog -->
     <string name="permission_explanation_title">Permission denied</string>
     <string name="permission_explanation_recorder">This app analyze the sound heard by *this* device. A permission of using microphone is required.</string>
-    <string name="permission_explanation_write">To record the sound, A permission of using read/write is required.</string>
 
     <!-- Show range dialog -->
     <string name="ok">OK</string>
@@ -127,4 +126,5 @@
     <string name="about">About</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="preference_experimental">Experimental</string>
+    <string name="screenshot">Screenshot stored in\u0020</string>
 </resources>

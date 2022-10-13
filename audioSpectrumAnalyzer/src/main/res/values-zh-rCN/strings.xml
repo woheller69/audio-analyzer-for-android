@@ -27,7 +27,6 @@
     <!-- permission dialog -->
     <string name="permission_explanation_title">没有权限</string>
     <string name="permission_explanation_recorder">需要读取麦克风的权限本程序才能正常工作。</string>
-    <string name="permission_explanation_write">需要读写储存的权限本程序才能录音。</string>
 
     <!-- Show range dialog -->
     <string name="ok">确定</string>
@@ -125,5 +124,5 @@
     <string name="set_cursor_freq_hint">freq [Hz]</string>
     <string name="privacy_policy">隐私政策</string>
     <string name="preference_experimental">Experimental</string>
-
+    <string name="screenshot">Screenshot stored in\u0020</string>
 </resources>
