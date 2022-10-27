@@ -23,7 +23,7 @@ Features
 * You may record the sound (while analyzing!) to a WAV file (PCM format). Then you can deal with it with your favorite tool.
 * Support all recorder sources except those need root privilege (see list in Android reference: [MediaRecorder.AudioSource](http://developer.android.com/reference/android/media/MediaRecorder.AudioSource.html))
 * Support all possible sampling rates that your phone is capable. e.g. useful to find out the native (or best) sampling format for you phone.
-
+* Load calibration files for microphones, see [Example](https://github.com/woheller69/audio-analyzer-for-android/blob/master/example_calibration.txt) 
 
 Permissions
 -------------------------
