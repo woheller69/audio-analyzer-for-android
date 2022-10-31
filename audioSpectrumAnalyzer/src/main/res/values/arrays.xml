@@ -89,12 +89,14 @@
         <item>50%</item>
         <item>75%</item>
         <item>87.5%</item>
+        <item>93.75%</item>
     </string-array>
     <string-array name="fft_overlap_percent" translatable="false">
         <item>0.0</item>
         <item>50.0</item>
         <item>75.0</item>
         <item>87.5</item>
+        <item>93.75</item>
     </string-array>
     <string name="fft_overlap_percent_default" translatable="false">50.0</string>
     <string-array name="audio_source" translatable="false">
@@ -136,6 +138,9 @@
     </string-array>
     <string-array name="fft_len" translatable="false">
         <item>@string/fft_len_name</item>
+        <item>64::64</item>
+        <item>128::128</item>
+        <item>256::256</item>
         <item>512::512</item>
         <item>1024::1024</item>
         <item>2048::2048</item>

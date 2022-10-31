@@ -15,6 +15,7 @@
         custom:sampleRate="16000" />
 
     <RelativeLayout
+        android:id="@+id/data_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -60,6 +61,7 @@
             android:layout_marginLeft="10dp">
 
             <LinearLayout
+                android:id="@+id/button_bar1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -116,6 +118,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
+        android:id="@+id/button_bar2"
         android:layout_height="wrap_content"
         android:gravity="center" >
 

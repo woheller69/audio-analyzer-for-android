@@ -261,6 +261,19 @@ public class AnalyzerActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(TAG, "onOptionsItemSelected(): " + item.toString());
         switch (item.getItemId()) {
+            case R.id.fullscreen:
+                if (findViewById(R.id.data_bar).getVisibility()==View.VISIBLE) {
+                    findViewById(R.id.data_bar).setVisibility(View.GONE);
+                    findViewById(R.id.button_bar1).setVisibility(View.GONE);
+                    findViewById(R.id.button_bar2).setVisibility(View.GONE);
+                    item.setIcon(R.drawable.ic_fullscreen_exit_24dp);
+                } else {
+                    findViewById(R.id.data_bar).setVisibility(View.VISIBLE);
+                    findViewById(R.id.button_bar1).setVisibility(View.VISIBLE);
+                    findViewById(R.id.button_bar2).setVisibility(View.VISIBLE);
+                    item.setIcon(R.drawable.ic_fullscreen_24dp);
+                }
+                return true;
             case R.id.screenshot:
                 if (ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED){
