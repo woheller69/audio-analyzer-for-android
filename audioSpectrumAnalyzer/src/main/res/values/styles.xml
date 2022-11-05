@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="DarkThemeSelector" parent="@style/Theme.AppCompat"></style>
+    <style name="DarkThemeSelector" parent="@style/Theme.AppCompat">
+        <item name="android:actionBarSize" >36dp</item>
+    </style>
 </resources>
