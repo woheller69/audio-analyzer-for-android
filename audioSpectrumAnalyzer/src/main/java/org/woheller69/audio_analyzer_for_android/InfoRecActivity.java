@@ -16,11 +16,9 @@
 package org.woheller69.audio_analyzer_for_android;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
@@ -46,23 +44,16 @@ public class InfoRecActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_info_rec);
-		// Show the Up button in the action bar.
-		setupActionBar();
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null){
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 
 		analyzerUtil = new AnalyzerUtil(this);
 		testResultSt = null;
 
 		final TextView tv = (TextView) findViewById(R.id.info_rec_tv);
 		tv.setMovementMethod(new ScrollingMovementMethod());
-	}
-
-	/**
-	 * Set up the {@link ActionBar}, if the API is available.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (getSupportActionBar() != null)
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override

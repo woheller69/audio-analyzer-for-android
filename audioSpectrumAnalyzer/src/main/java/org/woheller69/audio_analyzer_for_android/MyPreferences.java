@@ -23,12 +23,15 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
 
 // I was using an old cell phone -- API level 9 (android 2.3.6),
 // so here use PreferenceActivity instead of PreferenceFragment.
 // http://developer.android.com/guide/topics/ui/settings.html
 @SuppressWarnings("deprecation")
 public class MyPreferences extends PreferenceActivity {
+    private AppCompatDelegate mDelegate;
     private static final String TAG = "MyPreference";
     private static String[] audioSources;
     private static String[] audioSourcesName;
@@ -47,11 +50,14 @@ public class MyPreferences extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-
-        // as soon as the user modifies a preference,
-        // the system saves the changes to a default SharedPreferences file
+        ActionBar actionBar = getDelegate().getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
+    // as soon as the user modifies a preference,
+    // the system saves the changes to a default SharedPreferences file
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener =
         new SharedPreferences.OnSharedPreferenceChangeListener() {
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
@@ -127,5 +133,12 @@ public class MyPreferences extends PreferenceActivity {
         super.onPause();
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(prefListener);
+    }
+
+    private AppCompatDelegate getDelegate() {
+        if (mDelegate == null) {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
     }
 }
