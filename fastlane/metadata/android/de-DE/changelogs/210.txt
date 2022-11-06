@@ -1,0 +1,2 @@
+Fullscreen Modus hinzugefügt
+Option für kleiner FFT Länge und FFT Überlapp

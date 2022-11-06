@@ -1,0 +1,2 @@
+Add fullscreen mode
+Option for smaller FFT length and higher overlap

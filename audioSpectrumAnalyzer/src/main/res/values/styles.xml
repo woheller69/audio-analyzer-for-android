@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="DarkThemeSelector" parent="@style/Theme.AppCompat">
-        <item name="actionBarSize">32dp</item>
+        <item name="actionBarSize">36dp</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
