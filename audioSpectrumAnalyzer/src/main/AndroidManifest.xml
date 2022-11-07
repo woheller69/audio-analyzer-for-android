@@ -41,7 +41,11 @@
         </activity>
         <activity
             android:name="org.woheller69.audio_analyzer_for_android.MyPreferences"
-            android:label="@string/preferences" >
+            android:label="@string/preferences"
+            android:parentActivityName="org.woheller69.audio_analyzer_for_android.AnalyzerActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.woheller69.audio_analyzer_for_android.AnalyzerActivity" />
         </activity>
         <activity
             android:name="org.woheller69.audio_analyzer_for_android.InfoRecActivity"

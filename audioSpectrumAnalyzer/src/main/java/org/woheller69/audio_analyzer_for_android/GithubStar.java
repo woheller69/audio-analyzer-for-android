@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 
 import androidx.appcompat.app.AlertDialog;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 public class GithubStar {
     public static void setAskForStar(Context context, boolean askForStar){
