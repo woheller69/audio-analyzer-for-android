@@ -117,7 +117,7 @@
     <string name="dialog_OK_button">OK</string>
     <string name="dialog_NO_button">NO</string>
     <string name="dialog_Later_button">Maybe later</string>
-    <string name="dialog_StarOnGitHub">Do you like this app? Please star it on GitHub!</string>
+    <string name="dialog_StarOnGitHub">Do you like this app? Please give a star on GitHub or buy the developer a coffee via PayPal.</string>
     <string name="about">About</string>
     <string name="button_freq_freq">Curs</string>
     <string name="set_cursor_freq_dialog_title">Set cursor freq [Hz]</string>

@@ -50,7 +50,7 @@ This is provided for convenience of user (e.g. user might want to use another ap
 License
 --------
 
-This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio_analyzer_for_android), is released under the Apache License, Version 2.0.
+This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio-analyzer-for-android), is released under the Apache License, Version 2.0.
 
 Copyright [thinkingcow](https://github.com/thinkingcow), [bewantbe](https://github.com/bewantbe), [woheller69](https://github.com/woheller69)
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="org.woheller69.audio_analyzer_for_android"
     android:installLocation="auto">
 
@@ -27,16 +26,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <!-- Deeplink support -->
-                <!-- https://developer.android.com/training/app-indexing/deep-linking.html -->
-                <!-- Can start app by -->
-                <!-- adb shell am start -W -a android.intent.action.VIEW -d "bewantbe://asa" -->
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="bewantbe" android:host="asa" />
             </intent-filter>
         </activity>
         <activity
