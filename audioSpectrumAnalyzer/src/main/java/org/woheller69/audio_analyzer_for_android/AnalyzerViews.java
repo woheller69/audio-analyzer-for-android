@@ -220,17 +220,6 @@ class AnalyzerViews {
                 .create().show();
     }
 
-    void showPermissionExplanation(int resId) {
-        TextView tv = new TextView(activity);
-        tv.setMovementMethod(new ScrollingMovementMethod());
-        tv.setText(fromHtml(activity.getString(resId)));
-        new AlertDialog.Builder(activity)
-                .setTitle(R.string.permission_explanation_title)
-                .setView(tv)
-                .setNegativeButton(R.string.dismiss, null)
-                .create().show();
-    }
-
     // Thanks http://stackoverflow.com/questions/37904739/html-fromhtml-deprecated-in-android-n
     @SuppressWarnings("deprecation")
     public static android.text.Spanned fromHtml(String source) {

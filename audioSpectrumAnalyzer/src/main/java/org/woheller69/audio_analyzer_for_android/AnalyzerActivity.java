@@ -776,9 +776,6 @@ public class AnalyzerActivity extends AppCompatActivity
         samplingThread.start();
     }
 
-    // For call requestPermissions() after each showPermissionExplanation()
-    private int count_permission_explanation = 0;
-
     // For preventing infinity loop: onResume() -> requestPermissions() -> onRequestPermissionsResult() -> onResume()
     private int count_permission_request = 0;
 
@@ -788,39 +785,18 @@ public class AnalyzerActivity extends AppCompatActivity
     //   https://developer.android.com/training/permissions/requesting.html
     //   https://developer.android.com/guide/topics/permissions/requesting.html
     private boolean checkAndRequestPermissions() {
-        if (ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "Permission RECORD_AUDIO denied. Trying  to request...");
-            if (ActivityCompat.shouldShowRequestPermissionRationale(AnalyzerActivity.this, Manifest.permission.RECORD_AUDIO) &&
-                    count_permission_explanation < 1) {
-                Log.w(TAG, "  Show explanation here....");
-                analyzerViews.showPermissionExplanation(R.string.permission_explanation_recorder);
-                count_permission_explanation++;
-            } else {
-                Log.w(TAG, "  Requesting...");
                 if (count_permission_request < 3) {
                     ActivityCompat.requestPermissions(AnalyzerActivity.this,
                             new String[]{Manifest.permission.RECORD_AUDIO},
                             MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
-                    count_permission_explanation = 0;
                     count_permission_request++;
-                } else {
-                    this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Context context = getApplicationContext();
-                            String text = "Permission denied.";
-                            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-                            toast.show();
-                        }
-                    });
                 }
-            }
             return false;
         }
         if (bSaveWav &&
-                ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "Permission WRITE_EXTERNAL_STORAGE denied. Trying  to request...");
             ((SelectorText) findViewById(R.id.button_recording)).nextValue();
             bSaveWav = false;
@@ -844,8 +820,15 @@ public class AnalyzerActivity extends AppCompatActivity
             case MY_PERMISSIONS_REQUEST_RECORD_AUDIO: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.w(TAG, "RECORD_AUDIO Permission granted by user.");
+                    count_permission_request = 0; //once permission is granted reset counter. Just in case Android removes the permission
                 } else {
                     Log.w(TAG, "RECORD_AUDIO Permission denied by user.");
+                    this.runOnUiThread(() -> {
+                        Context context = getApplicationContext();
+                        String text = getString(R.string.permission_microphone_denied);
+                        Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+                        toast.show();
+                    });
                 }
                 break;
             }
@@ -854,19 +837,22 @@ public class AnalyzerActivity extends AppCompatActivity
                     Log.w(TAG, "WRITE_EXTERNAL_STORAGE Permission granted by user.");
                     if (! bSaveWav) {
                         Log.w(TAG, "... bSaveWav == true");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ((SelectorText) findViewById(R.id.button_recording)).nextValue();
-                                bSaveWav = true;
-                                analyzerViews.enableSaveWavView(bSaveWav);
-                            }
+                        runOnUiThread(() -> {
+                            ((SelectorText) findViewById(R.id.button_recording)).nextValue();
+                            bSaveWav = true;
+                            analyzerViews.enableSaveWavView(bSaveWav);
                         });
                     } else {
                         Log.w(TAG, "... bSaveWav == false");
                     }
                 } else {
                     Log.w(TAG, "WRITE_EXTERNAL_STORAGE Permission denied by user.");
+                    this.runOnUiThread(() -> {
+                        Context context = getApplicationContext();
+                        String text = getString(R.string.permission_storage_denied);
+                        Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+                        toast.show();
+                    });
                 }
                 break;
             }
