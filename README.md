@@ -15,7 +15,6 @@
 | [<img src="https://github.com/woheller69/gptassist/blob/master/fastlane/metadata/android/en-US/images/icon.png" width="50">](https://f-droid.org/packages/org.woheller69.gptassist/) |  |  |
 
 # Audio Spectrum Analyzer for Android
-===================================
 
 >  A fork of [Audio spectrum Analyzer for Android](https://code.google.com/p/audio-analyzer-for-android/) (See README.old for its original readme)
 
@@ -27,7 +26,6 @@
 
 
 ## Features
---------
 
 * Show [spectrum](http://en.wikipedia.org/wiki/Frequency_spectrum) or [spectrogram](http://en.wikipedia.org/wiki/Spectrogram) in real-time, with decent axis labels.
 * Linear, Logarithm and (Musical) Note frequency axis support.
@@ -42,13 +40,12 @@
 * Load calibration files for microphones, see [Example](https://github.com/woheller69/audio-analyzer-for-android/blob/master/example_calibration.txt) 
 
 ## Permissions
--------------------------
 
 * Microphone, of course.
 * External storage (e.g MicroSD card), if you want to record the sound.
 
 ## Privacy
--------------------------
+
 ### Information we collect and you share
 
 This app does not send any personal or non-personal information in any form over network. 
@@ -64,7 +61,6 @@ This is provided for convenience of user (e.g. user might want to use another ap
 
 
 ## License
---------
 
 This software, [Audio Spectrum Analyzer for Android](https://github.com/woheller69/audio-analyzer-for-android), is released under the Apache License, Version 2.0.
 
@@ -72,7 +68,6 @@ Copyright [thinkingcow](https://github.com/thinkingcow), [bewantbe](https://gith
 
 
 ## Code structure
---------------
 
 The whole program structure is roughly follows the MVC model: 
 
