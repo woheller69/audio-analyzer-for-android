@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "org.woheller69.audio_analyzer_for_android"
         minSdkVersion 14
-        targetSdkVersion 31
-        versionCode 220
-        versionName "2.2"
+        targetSdkVersion 33
+        versionCode 230
+        versionName "2.3"
     }
     buildTypes {
         release {
@@ -32,7 +32,7 @@ android {
 dependencies {
     implementation project(':FFTLibrary')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.5.1' //needed due to duplicate class error
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' //needed due to duplicate class error

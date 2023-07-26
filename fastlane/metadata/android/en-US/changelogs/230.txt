@@ -1,0 +1,3 @@
+Update for Android 13 (SDK 33)
+Monochrome icon support
+Removed Chinese and Taiwanese
