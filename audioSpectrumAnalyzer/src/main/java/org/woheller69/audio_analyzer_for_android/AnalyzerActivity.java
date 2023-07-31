@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -787,28 +788,27 @@ public class AnalyzerActivity extends AppCompatActivity
     private boolean checkAndRequestPermissions() {
         if (ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "Permission RECORD_AUDIO denied. Trying  to request...");
-                if (count_permission_request < 3) {
-                    ActivityCompat.requestPermissions(AnalyzerActivity.this,
-                            new String[]{Manifest.permission.RECORD_AUDIO},
-                            MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
-                    count_permission_request++;
-                }
+            if (count_permission_request < 3) {
+                ActivityCompat.requestPermissions(AnalyzerActivity.this,
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
+                count_permission_request++;
+            }
             return false;
         }
-        if (bSaveWav &&
-                ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.w(TAG, "Permission WRITE_EXTERNAL_STORAGE denied. Trying  to request...");
-            ((SelectorText) findViewById(R.id.button_recording)).nextValue();
-            bSaveWav = false;
-            analyzerViews.enableSaveWavView(bSaveWav);
-//      ((SelectorText) findViewById(R.id.button_recording)).performClick();
-            ActivityCompat.requestPermissions(AnalyzerActivity.this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-            // Still possible to proceed with bSaveWav == false
-            // simulate a view click, so that bSaveWav = false
+        if (bSaveWav) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU || ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                Log.w(TAG, "Permission WRITE_EXTERNAL_STORAGE denied. Trying  to request...");
+                ((SelectorText) findViewById(R.id.button_recording)).nextValue();
+                bSaveWav = false;
+                analyzerViews.enableSaveWavView(bSaveWav);
+                ActivityCompat.requestPermissions(AnalyzerActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+            }
         }
-
         return true;
     }
 

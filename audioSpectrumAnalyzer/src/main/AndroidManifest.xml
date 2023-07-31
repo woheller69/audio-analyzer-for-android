@@ -4,9 +4,8 @@
     android:installLocation="auto">
 
     <queries>
-        <intent>
-            <action android:name="android.intent.action.GET_CONTENT" />
-        </intent>
+        <intent> <action android:name="android.intent.action.GET_CONTENT" /> </intent>
+        <intent> <action android:name="android.intent.action.VIEW" /> </intent>
     </queries>
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
