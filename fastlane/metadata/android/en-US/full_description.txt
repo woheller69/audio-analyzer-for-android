@@ -1,4 +1,4 @@
-<i>Spectrum Spectogram Analyzer</i> was designed with accuracy and ease of use in mind. It can be used for monitoring or measuring environmental sound or noise; help tuning instruments; timing short sound events; and educational purpose.
+<i>Audio Spectrum Analyzer</i> was designed with accuracy and ease of use in mind. It can be used for monitoring or measuring environmental sound or noise; help tuning instruments; timing short sound events; and educational purpose.
 
 <br><b>Features:</b>
 
