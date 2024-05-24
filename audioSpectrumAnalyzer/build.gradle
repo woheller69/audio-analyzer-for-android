@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
+    compileSdk 34
     defaultConfig {
         applicationId "org.woheller69.audio_analyzer_for_android"
         minSdkVersion 14
-        targetSdkVersion 33
-        versionCode 250
-        versionName "2.5"
+        targetSdk 34
+        versionCode 260
+        versionName "2.6"
     }
     buildTypes {
         release {

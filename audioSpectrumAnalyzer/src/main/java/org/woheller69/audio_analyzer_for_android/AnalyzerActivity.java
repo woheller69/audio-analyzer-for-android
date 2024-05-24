@@ -276,7 +276,7 @@ public class AnalyzerActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.screenshot:
-                if (ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(AnalyzerActivity.this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -797,7 +797,7 @@ public class AnalyzerActivity extends AppCompatActivity
             return false;
         }
         if (bSaveWav) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU || ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
                 Log.w(TAG, "Permission WRITE_EXTERNAL_STORAGE denied. Trying  to request...");
