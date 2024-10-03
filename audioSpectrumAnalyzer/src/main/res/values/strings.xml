@@ -125,4 +125,7 @@
     <string name="screenshot">Screenshot stored in\u0020</string>
     <string name="permission_storage_denied">Permission to write to storage denied.</string>
     <string name="permission_microphone_denied">Permission for microphone denied.</string>
+    <string name="preference_peakHoldTime_1">in seconds</string>
+    <string name="preference_peakHoldTime_2">Peak Hold time</string>
+    <string name="preference_peakDropSpeed">Peak decay rate</string>
 </resources>

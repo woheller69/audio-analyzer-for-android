@@ -16,15 +16,14 @@
 package org.woheller69.audio_analyzer_for_android;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.SystemClock;
 import android.util.Log;
-
-import static java.lang.Math.abs;
-import static java.lang.Math.round;
+import androidx.preference.PreferenceManager;
 
 /**
  * The spectrum plot part of AnalyzerGraphic
@@ -42,7 +41,7 @@ class SpectrumPlot {
     private int canvasHeight=0, canvasWidth=0;
 
     private float DPRatio;
-
+    private AnalyzerUtil.PeakHoldAndFall peakHold;
     double cursorFreq, cursorDB;  // cursor location
     private Plot2D plot2D;
     ScreenPhysicalMapping axisX, axisY;
@@ -88,6 +87,11 @@ class SpectrumPlot {
                 canvasWidth, canvasHeight, DPRatio);
         axisX = plot2D.axisX;
         axisY = plot2D.axisY;
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(_context);
+        int peakHoldTime = sharedPref.getInt("prefPeakHold",2);
+        int peakDropSpeed = sharedPref.getInt("prefPeakDropSpeed", 20);
+        peakHold = new AnalyzerUtil.PeakHoldAndFall((double) peakHoldTime, (double) peakDropSpeed);
     }
 
     void setCanvas(int _canvasWidth, int _canvasHeight, double[] axisBounds) {
@@ -120,7 +124,6 @@ class SpectrumPlot {
     }
 
     private double[] db_cache = null;
-    private AnalyzerUtil.PeakHoldAndFall peakHold = new AnalyzerUtil.PeakHoldAndFall();
     private long timeLastCall;
 
     // Plot the spectrum into the Canvas c
