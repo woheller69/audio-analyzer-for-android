@@ -104,3 +104,8 @@ which calculates RMS and FFT whenever enough data is collected. The view is then
     activity.analyzerViews.update(spectrumDBcopy);
 
 which ultimately calls `invalidate()` of the graphic view to request an update, then the `AnalyzerGraphic.onDraw(Canvas c)` will be called automatically.
+
+
+## Contribute
+
+For translations use https://toolate.othing.xyz/projects/audio-spectrum-analyzer/
