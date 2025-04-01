@@ -6,8 +6,8 @@ android {
         applicationId "org.woheller69.audio_analyzer_for_android"
         minSdkVersion 14
         targetSdk 34
-        versionCode 270
-        versionName "2.7"
+        versionCode 280
+        versionName "2.8"
     }
     buildTypes {
         release {
