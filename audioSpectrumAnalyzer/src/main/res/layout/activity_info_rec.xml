@@ -1,17 +1,23 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InfoRecActivity" >
-
-    <TextView
-        android:id="@+id/info_rec_tv"
+    android:fitsSystemWindows="true">
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textSize="16sp"
-        android:typeface="monospace"
-        android:text="@string/text_view_info_log_0" />
+        tools:context=".InfoRecActivity" >
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/info_rec_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textSize="16sp"
+            android:typeface="monospace"
+            android:text="@string/text_view_info_log_0" />
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

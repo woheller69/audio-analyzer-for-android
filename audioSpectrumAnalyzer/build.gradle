@@ -1,39 +1,36 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 34
+    compileSdk 35
+    namespace 'org.woheller69.audio_analyzer_for_android'
+    android.buildFeatures.buildConfig true
+
     defaultConfig {
         applicationId "org.woheller69.audio_analyzer_for_android"
         minSdkVersion 14
-        targetSdk 34
+        targetSdk 35
         versionCode 280
         versionName "2.8"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
-            // See https://developer.android.com/studio/build/shrink-code.html
-            // Remember to check <module-name>/build/outputs/mapping/release/
-            //   usage.txt   : code that was removed
-            //   mapping.txt : the translation between the original and obfuscated class, method, and field names
             shrinkResources true
             minifyEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
-        }
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
-    productFlavors {
-    }
+
 }
 
 dependencies {
     implementation project(':FFTLibrary')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.preference:preference:1.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.5.1' //needed due to duplicate class error
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' //needed due to duplicate class error
+    implementation 'androidx.appcompat:appcompat:1.6.1'  //1.7.1 requires minSDK 21
+    implementation 'androidx.preference:preference:1.2.1'
 }

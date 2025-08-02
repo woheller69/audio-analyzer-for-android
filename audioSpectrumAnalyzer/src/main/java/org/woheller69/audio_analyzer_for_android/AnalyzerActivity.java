@@ -261,49 +261,50 @@ public class AnalyzerActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(TAG, "onOptionsItemSelected(): " + item.toString());
-        switch (item.getItemId()) {
-            case R.id.fullscreen:
-                if (findViewById(R.id.data_bar).getVisibility()==View.VISIBLE) {
-                    findViewById(R.id.data_bar).setVisibility(View.GONE);
-                    findViewById(R.id.button_bar1).setVisibility(View.GONE);
-                    findViewById(R.id.button_bar2).setVisibility(View.GONE);
-                    item.setIcon(R.drawable.ic_fullscreen_exit_24dp);
-                } else {
-                    findViewById(R.id.data_bar).setVisibility(View.VISIBLE);
-                    findViewById(R.id.button_bar1).setVisibility(View.VISIBLE);
-                    findViewById(R.id.button_bar2).setVisibility(View.VISIBLE);
-                    item.setIcon(R.drawable.ic_fullscreen_24dp);
-                }
-                return true;
-            case R.id.screenshot:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(AnalyzerActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                }
-                ScreenCapture.ScreenCapture(this);
-                return true;
-            case R.id.menu_manual:
-                analyzerViews.showInstructions();
-                return true;
-            case R.id.menu_settings:
-                Intent settings = new Intent(getBaseContext(), MyPreferences.class);
-                settings.putExtra(MYPREFERENCES_MSG_SOURCE_ID, analyzerParam.audioSourceIDs);
-                settings.putExtra(MYPREFERENCES_MSG_SOURCE_NAME, analyzerParam.audioSourceNames);
-                startActivity(settings);
-                return true;
-            case R.id.menu_test_recorder:
-                Intent int_info_rec = new Intent(this, InfoRecActivity.class);
-                startActivity(int_info_rec);
-                return true;
-            case R.id.menu_view_range:
-                rangeViewDialogC.ShowRangeViewDialog();
-                return true;
-            case R.id.menu_calibration:
-                selectFile(REQUEST_CALIB_LOAD);
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.fullscreen){
+            if (findViewById(R.id.data_bar).getVisibility()==View.VISIBLE) {
+                findViewById(R.id.data_bar).setVisibility(View.GONE);
+                findViewById(R.id.button_bar1).setVisibility(View.GONE);
+                findViewById(R.id.button_bar2).setVisibility(View.GONE);
+                item.setIcon(R.drawable.ic_fullscreen_exit_24dp);
+            } else {
+                findViewById(R.id.data_bar).setVisibility(View.VISIBLE);
+                findViewById(R.id.button_bar1).setVisibility(View.VISIBLE);
+                findViewById(R.id.button_bar2).setVisibility(View.VISIBLE);
+                item.setIcon(R.drawable.ic_fullscreen_24dp);
+            }
+            return true;
+        } else if (itemId == R.id.screenshot){
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(AnalyzerActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(AnalyzerActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+            }
+            ScreenCapture.ScreenCapture(this);
+            return true;
+        } else if (itemId == R.id.menu_manual){
+            analyzerViews.showInstructions();
+            return true;
+        } else if (itemId == R.id.menu_settings) {
+            Intent settings = new Intent(getBaseContext(), MyPreferences.class);
+            settings.putExtra(MYPREFERENCES_MSG_SOURCE_ID, analyzerParam.audioSourceIDs);
+            settings.putExtra(MYPREFERENCES_MSG_SOURCE_NAME, analyzerParam.audioSourceNames);
+            startActivity(settings);
+            return true;
+        } else if (itemId == R.id.menu_test_recorder) {
+            Intent int_info_rec = new Intent(this, InfoRecActivity.class);
+            startActivity(int_info_rec);
+            return true;
+        } else if (itemId == R.id.menu_view_range) {
+            rangeViewDialogC.ShowRangeViewDialog();
+            return true;
+        } else if (itemId == R.id.menu_calibration) {
+            selectFile(REQUEST_CALIB_LOAD);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -342,40 +343,36 @@ public class AnalyzerActivity extends AppCompatActivity
         }
 
         // dismiss the pop up
-        switch (buttonId) {
-            case R.id.button_sample_rate:
-                analyzerViews.popupMenuSampleRate.dismiss();
-                if (! isLockViewRange) {
-                    Log.i(TAG, "set sampling rate:b " + viewRangeArray[1] + " ==? " + viewRangeArray[6 + 1]);
-                    if (viewRangeArray[1] == viewRangeArray[6 + 1]) {
-                        viewRangeArray[1] = Integer.parseInt(selectedItemTag) / 2;
-                    }
-                    Log.i(TAG, "onItemClick(): viewRangeArray saved. " + viewRangeArray[0] + " ~ " + viewRangeArray[1]);
+        if (buttonId == R.id.button_sample_rate){
+            analyzerViews.popupMenuSampleRate.dismiss();
+            if (! isLockViewRange) {
+                Log.i(TAG, "set sampling rate:b " + viewRangeArray[1] + " ==? " + viewRangeArray[6 + 1]);
+                if (viewRangeArray[1] == viewRangeArray[6 + 1]) {
+                    viewRangeArray[1] = Integer.parseInt(selectedItemTag) / 2;
                 }
-                analyzerParam.sampleRate = Integer.parseInt(selectedItemTag);
-                b_need_restart_audio = true;
-                editor.putInt("button_sample_rate", analyzerParam.sampleRate);
-                break;
-            case R.id.button_fftlen:
-                analyzerViews.popupMenuFFTLen.dismiss();
-                analyzerParam.fftLen = Integer.parseInt(selectedItemTag);
-                analyzerParam.hopLen = (int)(analyzerParam.fftLen*(1 - analyzerParam.overlapPercent/100) + 0.5);
-                b_need_restart_audio = true;
-                editor.putInt("button_fftlen", analyzerParam.fftLen);
-                fillFftCalibration(analyzerParam, calibLoad);
-                break;
-            case R.id.button_average:
-                analyzerViews.popupMenuAverage.dismiss();
-                analyzerParam.nFFTAverage = Integer.parseInt(selectedItemTag);
-                if (analyzerViews.graphView != null) {
-                    analyzerViews.graphView.setTimeMultiplier(analyzerParam.nFFTAverage);
-                }
-                b_need_restart_audio = false;
-                editor.putInt("button_average", analyzerParam.nFFTAverage);
-                break;
-            default:
-                Log.w(TAG, "onItemClick(): no this button");
-                b_need_restart_audio = false;
+                Log.i(TAG, "onItemClick(): viewRangeArray saved. " + viewRangeArray[0] + " ~ " + viewRangeArray[1]);
+            }
+            analyzerParam.sampleRate = Integer.parseInt(selectedItemTag);
+            b_need_restart_audio = true;
+            editor.putInt("button_sample_rate", analyzerParam.sampleRate);
+        } else if (buttonId == R.id.button_fftlen) {
+            analyzerViews.popupMenuFFTLen.dismiss();
+            analyzerParam.fftLen = Integer.parseInt(selectedItemTag);
+            analyzerParam.hopLen = (int)(analyzerParam.fftLen*(1 - analyzerParam.overlapPercent/100) + 0.5);
+            b_need_restart_audio = true;
+            editor.putInt("button_fftlen", analyzerParam.fftLen);
+            fillFftCalibration(analyzerParam, calibLoad);
+        } else if (buttonId == R.id.button_average) {
+            analyzerViews.popupMenuAverage.dismiss();
+            analyzerParam.nFFTAverage = Integer.parseInt(selectedItemTag);
+            if (analyzerViews.graphView != null) {
+                analyzerViews.graphView.setTimeMultiplier(analyzerParam.nFFTAverage);
+            }
+            b_need_restart_audio = false;
+            editor.putInt("button_average", analyzerParam.nFFTAverage);
+        } else {
+            Log.w(TAG, "onItemClick(): no this button");
+            b_need_restart_audio = false;
         }
 
         editor.apply();
@@ -875,55 +872,45 @@ public class AnalyzerActivity extends AppCompatActivity
         } else {
             value = ((TextView) v).getText().toString();
         }
-        switch (v.getId()) {
-            case R.id.button_recording:
-                bSaveWav = value.equals("Rec");
-                //  SelectorText st = (SelectorText) findViewById(R.id.run);
-                //  if (bSaveWav && ! st.getText().toString().equals("stop")) {
-                //    st.nextValue();
-                //    if (samplingThread != null) {
-                //      samplingThread.setPause(true);
-                //    }
-                //  }
-                analyzerViews.enableSaveWavView(bSaveWav);
-                return true;
-            case R.id.run:
-                boolean pause = value.equals("stop");
-                if (samplingThread != null && samplingThread.getPause() != pause) {
-                    samplingThread.setPause(pause);
-                }
-                analyzerViews.graphView.spectrogramPlot.setPause(pause);
-                return false;
-                //case R.id.graph_view_mode:
-                //  isMeasure = !value.equals("scale");
-                //  return false;
-            case R.id.freq_scaling_mode: {
-                Log.d(TAG, "processClick(): freq_scaling_mode = " + value);
-                analyzerViews.graphView.setAxisModeLinear(value);
-                editor.putString("freq_scaling_mode", value);
-                editor.apply();
-                return false;
+        int itemId = v.getId();
+        if (itemId == R.id.button_recording){
+            bSaveWav = value.equals("Rec");
+            analyzerViews.enableSaveWavView(bSaveWav);
+            return true;
+        } else if (itemId == R.id.run) {
+            boolean pause = value.equals("stop");
+            if (samplingThread != null && samplingThread.getPause() != pause) {
+                samplingThread.setPause(pause);
             }
-            case R.id.dbA:
-                analyzerParam.isAWeighting = !value.equals("dB");
-                if (samplingThread != null) {
-                    samplingThread.setAWeighting(analyzerParam.isAWeighting);
-                }
-                editor.putBoolean("dbA", analyzerParam.isAWeighting);
-                editor.apply();
-                return false;
-            case R.id.spectrum_spectrogram_mode:
-                if (value.equals("spum")) {
-                    analyzerViews.graphView.switch2Spectrum();
-                } else {
-                    analyzerViews.graphView.switch2Spectrogram();
-                }
-                editor.putBoolean("spectrum_spectrogram_mode", value.equals("spum"));
-                editor.apply();
-                return false;
-            default:
-                return true;
+            analyzerViews.graphView.spectrogramPlot.setPause(pause);
+            return false;
+        } else if (itemId == R.id.freq_scaling_mode) {
+            Log.d(TAG, "processClick(): freq_scaling_mode = " + value);
+            analyzerViews.graphView.setAxisModeLinear(value);
+            editor.putString("freq_scaling_mode", value);
+            editor.apply();
+            return false;
+        } else if (itemId == R.id.dbA) {
+            analyzerParam.isAWeighting = !value.equals("dB");
+            if (samplingThread != null) {
+                samplingThread.setAWeighting(analyzerParam.isAWeighting);
+            }
+            editor.putBoolean("dbA", analyzerParam.isAWeighting);
+            editor.apply();
+            return false;
+        } else if (itemId == R.id.spectrum_spectrogram_mode) {
+            if (value.equals("spum")) {
+                analyzerViews.graphView.switch2Spectrum();
+            } else {
+                analyzerViews.graphView.switch2Spectrogram();
+            }
+            editor.putBoolean("spectrum_spectrogram_mode", value.equals("spum"));
+            editor.apply();
+            return false;
+        } else {
+            return true;
         }
+
     }
 
     private void vibrate(int ms) {

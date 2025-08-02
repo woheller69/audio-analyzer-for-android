@@ -250,19 +250,13 @@ class AnalyzerViews {
         int y_bottom = activity.getWindowManager().getDefaultDisplay().getHeight() - wl[1];
         int gravity = android.view.Gravity.START | android.view.Gravity.BOTTOM;
 
-        switch (view.getId()) {
-            case R.id.button_sample_rate:
-                popupMenuSampleRate.showAtLocation(view, gravity, x_left, y_bottom);
-//                popupMenuSampleRate.showAsDropDown(view, 0, 0);
-                break;
-            case R.id.button_fftlen:
-                popupMenuFFTLen.showAtLocation(view, gravity, x_left, y_bottom);
-//                popupMenuFFTLen.showAsDropDown(view, 0, 0);
-                break;
-            case R.id.button_average:
-                popupMenuAverage.showAtLocation(view, gravity, x_left, y_bottom);
-//                popupMenuAverage.showAsDropDown(view, 0, 0);
-                break;
+        int itemId = view.getId();
+        if (itemId == R.id.button_sample_rate){
+            popupMenuSampleRate.showAtLocation(view, gravity, x_left, y_bottom);
+        } else if (itemId == R.id.button_fftlen) {
+            popupMenuFFTLen.showAtLocation(view, gravity, x_left, y_bottom);
+        } else if (itemId == R.id.button_average) {
+            popupMenuAverage.showAtLocation(view, gravity, x_left, y_bottom);
         }
     }
 
