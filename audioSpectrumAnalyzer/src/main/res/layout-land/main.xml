@@ -1,214 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <view
-        android:id="@+id/plot"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.32"
-        class="org.woheller69.audio_analyzer_for_android.AnalyzerGraphic"
-        custom:cutoffDb="-25"
-        custom:sampleRate="16000" />
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/data_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        <view
+            android:id="@+id/plot"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.32"
+            class="org.woheller69.audio_analyzer_for_android.AnalyzerGraphic"
+            custom:cutoffDb="-25"
+            custom:sampleRate="16000" />
 
-        <TextView
-            android:id="@+id/textview_RMS"
-            android:layout_width="@dimen/textview_RMS_layout_width"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:lines="2"
-            android:lineSpacingExtra="3sp"
-            android:text="@string/textview_RMS_text"
-            android:typeface="monospace" />
+        <RelativeLayout
+            android:id="@+id/data_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/textview_cur"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/textview_RMS"
-            android:layout_toEndOf="@id/textview_RMS"
-            android:text="@string/textview_cur_text"
-            android:typeface="monospace" />
+            <TextView
+                android:id="@+id/textview_RMS"
+                android:layout_width="@dimen/textview_RMS_layout_width"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:lines="2"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/textview_RMS_text"
+                android:typeface="monospace" />
 
-        <TextView
-            android:id="@+id/textview_peak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textview_cur"
-            android:layout_toRightOf="@id/textview_RMS"
-            android:layout_toEndOf="@id/textview_RMS"
-            android:text="@string/textview_peak_text"
-            android:typeface="monospace" />
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:layout_gravity="center"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/textview_cur"
-            android:layout_toRightOf="@+id/textview_cur"
-            android:layout_marginLeft="10dp">
-
-            <LinearLayout
-                android:id="@+id/button_bar1"
+            <TextView
+                android:id="@+id/textview_cur"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/button_sample_rate"
-                    android:paddingVertical="@dimen/button_vertical_padding"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/textview_RMS"
+                android:layout_toEndOf="@id/textview_RMS"
+                android:text="@string/textview_cur_text"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/textview_peak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_cur"
+                android:layout_toRightOf="@id/textview_RMS"
+                android:layout_toEndOf="@id/textview_RMS"
+                android:text="@string/textview_peak_text"
+                android:typeface="monospace" />
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/textview_cur"
+                android:layout_toRightOf="@+id/textview_cur"
+                android:layout_marginLeft="10dp">
+
+                <LinearLayout
+                    android:id="@+id/button_bar1"
                     android:layout_width="wrap_content"
-                    android:layout_height="40sp"
-                    android:layout_gravity="center"
-                    android:onClick="showPopupMenu"
-                    android:text="@string/sample_s"
-                    android:textSize="18sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/button_sample_rate"
+                        android:paddingVertical="@dimen/button_vertical_padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:layout_gravity="center"
+                        android:onClick="showPopupMenu"
+                        android:text="@string/sample_s"
+                        android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/button_fftlen"
-                    android:paddingVertical="@dimen/button_vertical_padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40sp"
-                    android:layout_gravity="center"
-                    android:onClick="showPopupMenu"
-                    android:text="@string/fftlen"
-                    android:textSize="18sp" />
+                    <Button
+                        android:id="@+id/button_fftlen"
+                        android:paddingVertical="@dimen/button_vertical_padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:layout_gravity="center"
+                        android:onClick="showPopupMenu"
+                        android:text="@string/fftlen"
+                        android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/button_average"
-                    android:paddingVertical="@dimen/button_vertical_padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40sp"
-                    android:layout_gravity="center"
-                    android:onClick="showPopupMenu"
-                    android:text="@string/ave"
-                    android:textSize="18sp" />
-                <Button
-                    android:id="@+id/button_set_cursor_freq"
-                    android:paddingVertical="@dimen/button_vertical_padding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/button_button_height"
-                    android:layout_gravity="center"
-                    android:onClick="showCursorFreqPopup"
-                    android:text="@string/button_freq_freq"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/button_average"
+                        android:paddingVertical="@dimen/button_vertical_padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:layout_gravity="center"
+                        android:onClick="showPopupMenu"
+                        android:text="@string/ave"
+                        android:textSize="18sp" />
+                    <Button
+                        android:id="@+id/button_set_cursor_freq"
+                        android:paddingVertical="@dimen/button_vertical_padding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_button_height"
+                        android:layout_gravity="center"
+                        android:onClick="showCursorFreqPopup"
+                        android:text="@string/button_freq_freq"
+                        android:textSize="18sp" />
+                </LinearLayout>
 
-        </HorizontalScrollView>
+            </HorizontalScrollView>
 
-    </RelativeLayout>
+        </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textview_rec"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/textview_rec_text"
-        android:typeface="monospace" />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:id="@+id/button_bar2"
-        android:layout_height="wrap_content"
-        android:gravity="center" >
-
-        <org.woheller69.audio_analyzer_for_android.SelectorText
-            android:id="@+id/button_recording"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textview_rec"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingRight="5dp"
-            android:paddingEnd="5dp"
-            android:tag="select"
-            android:text="Mon"
-            android:textSize="20sp"
-            custom:itemsDisplay="@string/button_recording"
-            custom:items="Mon Rec" />
+            android:text="@string/textview_rec_text"
+            android:typeface="monospace" />
 
-        <org.woheller69.audio_analyzer_for_android.SelectorText
-            android:id="@+id/spectrum_spectrogram_mode"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:id="@+id/button_bar2"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingRight="5dp"
-            android:paddingEnd="5dp"
-            android:tag="select"
-            android:text="1D"
-            android:textSize="20sp"
-            custom:itemsDisplay="@string/button_spectrum_spectrogram_mode"
-            custom:items="spum spam" />
+            android:gravity="center" >
 
-        <org.woheller69.audio_analyzer_for_android.SelectorText
-            android:id="@+id/dbA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingRight="5dp"
-            android:paddingEnd="5dp"
-            android:tag="select"
-            android:text="dB"
-            android:textSize="20sp"
-            custom:itemsDisplay="@string/button_dbA"
-            custom:items="dB dBA" />
+            <org.woheller69.audio_analyzer_for_android.SelectorText
+                android:id="@+id/button_recording"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                android:tag="select"
+                android:text="Mon"
+                android:textSize="20sp"
+                custom:itemsDisplay="@string/button_recording"
+                custom:items="Mon Rec" />
 
-        <!--<github.bewantbe.audio_analyzer_for_android.SelectorText-->
-        <!--android:id="@+id/graph_view_mode"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="4dp"-->
-        <!--android:paddingLeft="15dp"-->
-        <!--android:tag="select"-->
-        <!--android:text="cursor"-->
-        <!--android:textSize="20sp"-->
-        <!--custom:items="cursor scale" />-->
+            <org.woheller69.audio_analyzer_for_android.SelectorText
+                android:id="@+id/spectrum_spectrogram_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                android:tag="select"
+                android:text="1D"
+                android:textSize="20sp"
+                custom:itemsDisplay="@string/button_spectrum_spectrogram_mode"
+                custom:items="spum spam" />
 
-        <org.woheller69.audio_analyzer_for_android.SelectorText
-            android:id="@+id/freq_scaling_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingRight="5dp"
-            android:paddingEnd="5dp"
-            android:tag="select"
-            android:text="linear"
-            android:textSize="20sp"
-            custom:itemsDisplay="@string/button_freq_scaling_mode"
-            custom:items="linear log note" />
+            <org.woheller69.audio_analyzer_for_android.SelectorText
+                android:id="@+id/dbA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                android:tag="select"
+                android:text="dB"
+                android:textSize="20sp"
+                custom:itemsDisplay="@string/button_dbA"
+                custom:items="dB dBA" />
 
-        <org.woheller69.audio_analyzer_for_android.SelectorText
-            android:id="@+id/run"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
-            android:paddingRight="5dp"
-            android:paddingEnd="5dp"
-            android:tag="select"
-            android:text="@string/button_run"
-            android:textSize="20sp"
-            custom:itemsDisplay="@string/button_run"
-            custom:items="run stop" />
+            <!--<github.bewantbe.audio_analyzer_for_android.SelectorText-->
+            <!--android:id="@+id/graph_view_mode"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="4dp"-->
+            <!--android:paddingLeft="15dp"-->
+            <!--android:tag="select"-->
+            <!--android:text="cursor"-->
+            <!--android:textSize="20sp"-->
+            <!--custom:items="cursor scale" />-->
 
+            <org.woheller69.audio_analyzer_for_android.SelectorText
+                android:id="@+id/freq_scaling_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                android:tag="select"
+                android:text="linear"
+                android:textSize="20sp"
+                custom:itemsDisplay="@string/button_freq_scaling_mode"
+                custom:items="linear log note" />
+
+            <org.woheller69.audio_analyzer_for_android.SelectorText
+                android:id="@+id/run"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                android:tag="select"
+                android:text="@string/button_run"
+                android:textSize="20sp"
+                custom:itemsDisplay="@string/button_run"
+                custom:items="run stop" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
