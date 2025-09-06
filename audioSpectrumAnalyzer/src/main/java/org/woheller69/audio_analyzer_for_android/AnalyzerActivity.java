@@ -56,6 +56,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GestureDetectorCompat;
+import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
 /**
  * Audio "FFT" analyzer.
@@ -122,6 +123,7 @@ public class AnalyzerActivity extends AppCompatActivity
 
         mDetector = new GestureDetectorCompat(this, new AnalyzerGestureListener());
 
+        FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE);
         if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(this,"https://github.com/woheller69/audio-analyzer-for-android");
     }
 
