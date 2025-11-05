@@ -9,8 +9,8 @@ android {
         applicationId "org.woheller69.audio_analyzer_for_android"
         minSdkVersion 14
         targetSdk 35
-        versionCode 300
-        versionName "3.0"
+        versionCode 310
+        versionName "3.1"
     }
 
     compileOptions {
@@ -33,5 +33,5 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'  //1.7.1 requires minSDK 21
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'com.github.woheller69:FreeDroidWarn:+'
+    implementation 'com.github.woheller69:FreeDroidWarn:V1.6'
 }
