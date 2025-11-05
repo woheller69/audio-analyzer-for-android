@@ -282,6 +282,8 @@ public class AnalyzerGraphic extends View {
             } else {
                 spectrogramPlot.axisFreq.setViewBounds(ranges[1], ranges[0]);
             }
+            spectrogramPlot.spectrogramBMP.dBLowerBound = ranges[2];
+            spectrogramPlot.spectrogramBMP.dBUpperBound = ranges[3];
             spectrogramPlot.spectrogramBMP.updateAxis(spectrogramPlot.axisFreq);
         }
 
