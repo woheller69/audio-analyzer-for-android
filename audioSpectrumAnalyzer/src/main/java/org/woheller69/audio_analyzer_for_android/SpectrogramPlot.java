@@ -31,6 +31,13 @@ class SpectrogramPlot {
     private static final String TAG = "SpectrogramPlot:";
     boolean showFreqAlongX = false;
 
+    // 1D+2D mode: fixed waterfall layout (frequency on X, time from top to bottom,
+    // history length = canvas height). Otherwise the original standalone 2D behaviour.
+    private boolean combined = false;
+    // User settings, re-applied when leaving the combined mode.
+    private boolean userShifting = false;
+    private boolean userFreqAlongX = false;
+
     enum TimeAxisMode {  // java's enum type is inconvenient
         SHIFT(0), OVERWRITE(1);       // 0: moving (shifting) spectrogram, 1: overwriting in loop
 
@@ -114,16 +121,23 @@ class SpectrogramPlot {
         int nAve             = analyzerParam.nFFTAverage;
         double timeDurationE = analyzerParam.spectrogramDuration;
         zeroPadFac = analyzerParam.zeroPadFac;
-        timeWatch = timeDurationE;
         timeMultiplier = nAve;
         timeInc     = (double)hopLen / sampleRate / zeroPadFac;  // time of each slice
         nFreqPoints = fftLen / 2;           // no direct current term
-        nTimePoints = (int)Math.ceil(timeWatch / timeInc);
+        if (combined) {
+            nTimePoints = Math.max(1, (int)axisTime.nCanvasPixel);
+            timeWatch = nTimePoints * timeInc;
+            updateTimeAxis();
+        } else {
+            timeWatch = timeDurationE;
+            nTimePoints = (int)Math.ceil(timeWatch / timeInc);
+        }
+        spectrogramBMP.newestOnTop = combined;
         spectrogramBMP.init(nFreqPoints, nTimePoints, axisFreq);
         Log.i(TAG, "setupSpectrogram() done" +
                 "\n  sampleRate    = " + sampleRate +
                 "\n  fftLen        = " + fftLen +
-                "\n  timeDurationE = " + timeDurationE + " * " + nAve + "  (" + nTimePoints + " points)" +
+                "\n  historySeconds = " + timeWatch * nAve + "  (" + nTimePoints + " pixel rows)" +
                 "\n  canvas size freq= " + axisFreq.nCanvasPixel + " time=" + axisTime.nCanvasPixel);
     }
 
@@ -142,12 +156,14 @@ class SpectrogramPlot {
                 axisTime.setBounds(axisBounds[0], axisBounds[2]);
                 axisFreq.setBounds(axisBounds[1], axisBounds[3]);
             }
-            if (showModeSpectrogram == TimeAxisMode.SHIFT) {
+            if (!combined && showModeSpectrogram == TimeAxisMode.SHIFT) {
                 double b1 = axisTime.vLowerBound;
                 double b2 = axisTime.vUpperBound;
                 axisTime.setBounds(b2, b1);
             }
         }
+        // History is resized to the canvas in drawSpectrogramPlot()/setupSpectrogram(),
+        // once nFreqPoints and timeInc are up to date.
         fqGridLabel.setDensity(axisFreq.nCanvasPixel * gridDensity / DPRatio);
         tmGridLabel.setDensity(axisTime.nCanvasPixel * gridDensity / DPRatio);
 
@@ -158,10 +174,10 @@ class SpectrogramPlot {
         //Log.i(TAG, "setZooms():  xZ=" + xZoom + "  xS=" + xShift + "  yZ=" + yZoom + "  yS=" + yShift);
         if (showFreqAlongX) {
             axisFreq.setZoomShift(xZoom, xShift);
-            axisTime.setZoomShift(yZoom, yShift);
+            if (combined) axisTime.setZoomShift(1, 0); else axisTime.setZoomShift(yZoom, yShift);
         } else {
             axisFreq.setZoomShift(yZoom, yShift);
-            axisTime.setZoomShift(xZoom, xShift);
+            if (combined) axisTime.setZoomShift(1, 0); else axisTime.setZoomShift(xZoom, xShift);
         }
         spectrogramBMP.updateZoom();
     }
@@ -208,8 +224,28 @@ class SpectrogramPlot {
         cursorFreq = 0;
     }
 
+    private void updateTimeAxis() {
+        axisTime.setBounds(0, timeWatch * timeMultiplier);
+        axisTime.setZoomShift(1, 0);
+    }
+
+    private void resizeHistoryToCanvas() {
+        if (!combined || timeInc <= 0 || nFreqPoints <= 0) return;
+        int rows = Math.max(1, (int)axisTime.nCanvasPixel);
+        if (rows != nTimePoints) {
+            spectrogramBMP.resizeTimeRows(rows, axisFreq);
+            nTimePoints = rows;
+        }
+        timeWatch = rows * timeInc;
+        updateTimeAxis();
+    }
+
     void setTimeMultiplier(int nAve) {
         timeMultiplier = nAve;
+        if (combined) {
+            updateTimeAxis();
+            return;
+        }
         if (showModeSpectrogram == TimeAxisMode.SHIFT) {
             axisTime.vLowerBound = timeWatch * timeMultiplier;
         } else {
@@ -223,7 +259,37 @@ class SpectrogramPlot {
         bShowTimeAxis = bSTA;
     }
 
+    // Switch between the standalone 2D layout (user settings) and the fixed 1D+2D layout.
+    // The caller has to run setupAxes()/setupSpectrogram() afterwards.
+    void setCombined(boolean c) {
+        if (combined == c) return;
+        combined = c;
+        spectrogramBMP.newestOnTop = c;
+        if (c) {
+            applyShifting(true);
+            applyFreqAlongX(true);
+        } else {
+            applyShifting(userShifting);
+            applyFreqAlongX(userFreqAlongX);
+        }
+    }
+
+    boolean isCombined() {
+        return combined;
+    }
+
     void setSpectrogramModeShifting(boolean b) {
+        userShifting = b;
+        if (!combined) applyShifting(b);
+    }
+
+    private void applyShifting(boolean b) {
+        if (combined) {
+            // newest slice stays at the top; the time axis is plain 0..T
+            showModeSpectrogram = TimeAxisMode.SHIFT;
+            updateTimeAxis();
+            return;
+        }
         if ((showModeSpectrogram == TimeAxisMode.SHIFT) != b) {
             // mode change, swap time bounds.
             double b1 = axisTime.vLowerBound;
@@ -239,6 +305,11 @@ class SpectrogramPlot {
     }
 
     void setShowFreqAlongX(boolean b) {
+        userFreqAlongX = b;
+        if (!combined) applyFreqAlongX(b);
+    }
+
+    private void applyFreqAlongX(boolean b) {
         if (showFreqAlongX != b) {
             // Set (swap) canvas size
             double t = axisFreq.nCanvasPixel;
@@ -265,7 +336,7 @@ class SpectrogramPlot {
     private boolean updateTimeDiff = false;
 
     void prepare() {
-        if (showModeSpectrogram == TimeAxisMode.SHIFT)
+        if (!combined && showModeSpectrogram == TimeAxisMode.SHIFT)
             setPause(isPaused);
     }
 
@@ -279,16 +350,18 @@ class SpectrogramPlot {
     // Will be called in another thread (SamplingLoop)
     // db.length == 2^n + 1
     void saveRowSpectrumAsColor(final double[] db) {
-        // For time compensate in shifting mode
-        double tNow = System.currentTimeMillis()/1000.0;
-        updateTimeDiff = true;
-        if (Math.abs(timeLastSample - tNow) > 0.5) {
-            timeLastSample = tNow;
-        } else {
-            timeLastSample += timeInc * timeMultiplier;
-            timeLastSample += (tNow - timeLastSample) * 1e-2;  // track current time
+        if (!combined) {
+            // For time compensate in shifting mode
+            double tNow = System.currentTimeMillis()/1000.0;
+            updateTimeDiff = true;
+            if (Math.abs(timeLastSample - tNow) > 0.5) {
+                timeLastSample = tNow;
+            } else {
+                timeLastSample += timeInc * timeMultiplier;
+                timeLastSample += (tNow - timeLastSample) * 1e-2;  // track current time
+            }
         }
-
+        // 1D+2D: each averaged FFT result advances the waterfall by exactly one physical pixel.
         spectrogramBMP.fill(db);
     }
 
@@ -298,7 +371,8 @@ class SpectrogramPlot {
         if (!showFreqAlongX && !bShowTimeAxis) {
             return canvasHeight;
         } else {
-            return canvasHeight - 0.6f*labelLargeLen - textHeigh;
+            float h = canvasHeight - 0.6f*labelLargeLen - textHeigh;
+            return combined ? Math.max(1, (float)Math.floor(h)) : h;
         }
     }
 
@@ -308,7 +382,7 @@ class SpectrogramPlot {
         float labelLaegeLen = 0.5f * textHeight;
         if (showFreqAlongX) {
             if (bShowTimeAxis) {
-                int j = 3;
+                int j = combined ? 4 : 3;
                 for (int i = 0; i < tmGridLabel.strings.length; i++) {
                     if (j < tmGridLabel.strings[i].length()) {
                         j = tmGridLabel.strings[i].length();
@@ -316,7 +390,7 @@ class SpectrogramPlot {
                 }
                 return 0.6f*labelLaegeLen + j*0.5f*textHeight;
             } else {
-                return 0;
+                return combined ? 0.6f*labelLaegeLen + 2*textHeight : 0;
             }
         } else {
             return 0.6f*labelLaegeLen + 2.5f*textHeight;
@@ -383,6 +457,7 @@ class SpectrogramPlot {
         }
     }
 
+
     private double pixelTimeCompensate = 0;
     private volatile boolean isPaused = false;
 
@@ -392,6 +467,7 @@ class SpectrogramPlot {
             return;
         }
         updateDrawingWindowSize();
+        resizeHistoryToCanvas();
         fqGridLabel.setDensity(axisFreq.nCanvasPixel * gridDensity / DPRatio);
         tmGridLabel.setDensity(axisTime.nCanvasPixel * gridDensity / DPRatio);
         fqGridLabel.updateGridLabels(axisFreq.vMinInView(), axisFreq.vMaxInView());
@@ -424,18 +500,19 @@ class SpectrogramPlot {
         c.save();
         c.concat(matrixSpectrogram);
 
-        // Time compensate to make it smoother shifting.
+        // Time compensate to make it smoother shifting (standalone 2D only).
         // But if user pressed pause, stop compensate.
-        if (!isPaused && updateTimeDiff) {
-            double timeCurrent = System.currentTimeMillis() / 1000.0;
-            pixelTimeCompensate = (timeLastSample - timeCurrent) / (timeInc * timeMultiplier * nTimePoints) * nTimePoints;
-            updateTimeDiff = false;
-//            Log.i(TAG, " time diff = " + (timeLastSample - timeCurrent));
+        if (!combined) {
+            if (!isPaused && updateTimeDiff) {
+                double timeCurrent = System.currentTimeMillis() / 1000.0;
+                pixelTimeCompensate = (timeLastSample - timeCurrent) / (timeInc * timeMultiplier * nTimePoints) * nTimePoints;
+                updateTimeDiff = false;
+            }
+            if (showModeSpectrogram == TimeAxisMode.SHIFT) {
+                c.translate(0.0f, (float)pixelTimeCompensate);
+            }
         }
-        if (showModeSpectrogram == TimeAxisMode.SHIFT) {
-            c.translate(0.0f, (float)pixelTimeCompensate);
-        }
-
+        // 1D+2D: whole-pixel steps keep every FFT slice sharp and the newest at row zero.
         if (axisFreq.mapType == ScreenPhysicalMapping.Type.LOG &&
                 spectrogramBMP.logAxisMode == SpectrogramBMP.LogAxisPlotMode.REPLOT) {
             // Revert the effect of axisFreq.getZoom() axisFreq.getShift() for the mode REPLOT
@@ -447,7 +524,7 @@ class SpectrogramPlot {
             }
         }
 
-        spectrogramBMP.draw(c, axisFreq.mapType, showModeSpectrogram, smoothBmpPaint, cursorTimePaint);
+        spectrogramBMP.draw(c, axisFreq.mapType, showModeSpectrogram, combined ? null : smoothBmpPaint, cursorTimePaint);
         c.restore();
 
         drawFreqCursor(c);

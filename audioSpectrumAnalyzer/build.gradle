@@ -11,6 +11,7 @@ android {
         targetSdk 35
         versionCode 320
         versionName "3.2"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -34,4 +35,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'  //1.7.1 requires minSDK 21
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'com.github.woheller69:FreeDroidWarn:V1.10'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
 }

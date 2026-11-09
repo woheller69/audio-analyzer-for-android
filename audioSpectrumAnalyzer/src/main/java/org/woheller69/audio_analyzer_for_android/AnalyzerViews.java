@@ -429,14 +429,21 @@ class AnalyzerViews {
     private static final int VIEW_MASK_CursorLabel   = 1<<3;
     private static final int VIEW_MASK_RecTimeLable  = 1<<4;
 
+    private static final double MIN_DRAW_FPS = 30;
+
     private void invalidateGraphView(int viewMask) {
         if (isInvalidating) {
             return ;
         }
         isInvalidating = true;
         long frameTime;                      // time delay for next frame
-        if (graphView.getShowMode() != AnalyzerGraphic.PlotMode.SPECTRUM) {
+        AnalyzerGraphic.PlotMode mode = graphView.getShowMode();
+        if (mode == AnalyzerGraphic.PlotMode.SPECTROGRAM) {
             frameTime = (long)(1000/fpsLimit);  // use a much lower frame rate for spectrogram
+        } else if (mode == AnalyzerGraphic.PlotMode.COMBINED) {
+            // Both panes are drawn together; keep the 1D spectrum smooth even when the
+            // waterfall FPS setting is low (waterfall scrolling is driven by data, not draw rate).
+            frameTime = (long)(1000/Math.max(fpsLimit, MIN_DRAW_FPS));
         } else {
             frameTime = 1000/60;
         }

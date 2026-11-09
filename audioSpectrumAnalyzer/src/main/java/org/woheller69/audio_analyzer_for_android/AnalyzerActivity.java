@@ -398,10 +398,7 @@ public class AnalyzerActivity extends AppCompatActivity
         if (analyzerParam.isAWeighting) {
             ((SelectorText) findViewById(R.id.dbA)).nextValue();
         }
-        boolean isSpam = sharedPref.getBoolean("spectrum_spectrogram_mode", true);
-        if (!isSpam) {
-            ((SelectorText) findViewById(R.id.spectrum_spectrogram_mode)).nextValue();
-        }
+        ((SelectorText) findViewById(R.id.spectrum_spectrogram_mode)).setValue(loadDisplayMode(sharedPref));
         String axisMode = sharedPref.getString("freq_scaling_mode", "linear");
         SelectorText st = (SelectorText) findViewById(R.id.freq_scaling_mode);
         st.setValue(axisMode);
@@ -443,8 +440,8 @@ public class AnalyzerActivity extends AppCompatActivity
         );
 
         // spectrogram
-        analyzerViews.graphView.setSpectrogramModeShifting(sharedPref.getBoolean("spectrogramShifting", false));
         analyzerViews.graphView.setShowTimeAxis           (sharedPref.getBoolean("spectrogramTimeAxis", true));
+        analyzerViews.graphView.setSpectrogramModeShifting(sharedPref.getBoolean("spectrogramShifting", false));
         analyzerViews.graphView.setShowFreqAlongX         (sharedPref.getBoolean("spectrogramShowFreqAlongX", true));
         analyzerViews.graphView.setSmoothRender           (sharedPref.getBoolean("spectrogramSmoothRender", false));
         analyzerViews.graphView.setColorMap               (sharedPref.getString ("spectrogramColorMap", "Hot"));
@@ -480,6 +477,24 @@ public class AnalyzerActivity extends AppCompatActivity
                     break;
                 }
             }
+            if (!sharedPref.getBoolean("combined_range_initialized", false)) {
+                // Migrate ranges saved while the combined View had uninitialized axes.
+                SharedPreferences.Editor rangeEditor = sharedPref.edit();
+                if (rr != null) {
+                    double configuredLower;
+                    try {
+                        configuredLower = Double.parseDouble(sharedPref.getString(
+                                "spectrumRange", Double.toString(AnalyzerGraphic.minDB)));
+                    } catch (NumberFormatException e) {
+                        configuredLower = AnalyzerGraphic.minDB;
+                    }
+                    if (AnalyzerGraphic.repairLegacyLockedDBRange(rr, configuredLower)) {
+                        AnalyzerUtil.putDouble(rangeEditor, "view_range_rr_2", rr[2]);
+                        AnalyzerUtil.putDouble(rangeEditor, "view_range_rr_3", rr[3]);
+                    }
+                }
+                rangeEditor.putBoolean("combined_range_initialized", true).apply();
+            }
             if (rr != null) {
                 viewRangeArray = rr;
             }
@@ -487,6 +502,25 @@ public class AnalyzerActivity extends AppCompatActivity
         } else {
             stickToMeasureModeCancel();
         }
+    }
+
+    // Display mode: "spum" (1D), "spam" (2D) or "both" (1D+2D).
+    // Older versions stored a boolean under "spectrum_spectrogram_mode".
+    private String loadDisplayMode(SharedPreferences sharedPref) {
+        String mode = null;
+        try {
+            mode = sharedPref.getString("display_mode", null);
+        } catch (ClassCastException ignored) {
+        }
+        if (mode == null) {
+            boolean isSpum = true;
+            try {
+                isSpum = sharedPref.getBoolean("spectrum_spectrogram_mode", true);
+            } catch (ClassCastException ignored) {
+            }
+            mode = isSpum ? "spum" : "spam";
+        }
+        return mode;
     }
 
     void stickToMeasureMode() {
@@ -691,6 +725,7 @@ public class AnalyzerActivity extends AppCompatActivity
                 graphView.getLocationInWindow(windowLocation);
                 // Log.i(TAG, "scaleEvent(): xy=" + x + " " + y + "  wc = " + wc[0] + " " + wc[1]);
                 if (isPinching || xShift0 == INIT) {
+                    graphView.beginPan(y);
                     xShift0 = graphView.getXShift();
                     x0 = x;
                     yShift0 = graphView.getYShift();
@@ -903,10 +938,12 @@ public class AnalyzerActivity extends AppCompatActivity
         } else if (itemId == R.id.spectrum_spectrogram_mode) {
             if (value.equals("spum")) {
                 analyzerViews.graphView.switch2Spectrum();
-            } else {
+            } else if (value.equals("spam")) {
                 analyzerViews.graphView.switch2Spectrogram();
+            } else {
+                analyzerViews.graphView.switch2Combined();
             }
-            editor.putBoolean("spectrum_spectrogram_mode", value.equals("spum"));
+            editor.putString("display_mode", value);
             editor.apply();
             return false;
         } else {

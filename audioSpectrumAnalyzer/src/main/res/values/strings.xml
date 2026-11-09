@@ -21,7 +21,7 @@
     <string name="button_freq_scaling_mode">LINEAR::LOG::NOTE</string>
     <string name="button_run">RUN::STOP</string>
     <string name="button_dbA">dB::dBA</string>
-    <string name="button_spectrum_spectrogram_mode">1D::2D</string>
+    <string name="button_spectrum_spectrogram_mode">1D::2D::1D+2D</string>
     <string name="button_recording">MON::REC</string>
     <string name="button_freq_freq">Curs</string>
 

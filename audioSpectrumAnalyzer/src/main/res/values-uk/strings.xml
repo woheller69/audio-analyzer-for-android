@@ -19,7 +19,7 @@
     <string name="button_freq_scaling_mode">ЛІНІЙН::ЛОГ::НОТИ</string>
     <string name="button_run">СТАРТ::СТОП</string>
     <string name="button_dbA">дБ::дБА</string>
-    <string name="button_spectrum_spectrogram_mode">1D::2D</string>
+    <string name="button_spectrum_spectrogram_mode">1D::2D::1D+2D</string>
     <string name="show_range_tv_dBL">Установити нижню й верхню межі дБ</string>
     <string name="show_range_tv_dBH">(%1$.2f&lt;= дБ &lt;=%2$.2f)</string>
     <string name="et_freq_setting_lower_bound">нижня межа частоти</string>

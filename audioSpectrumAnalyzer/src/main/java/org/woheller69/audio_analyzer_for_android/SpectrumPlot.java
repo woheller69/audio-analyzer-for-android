@@ -94,6 +94,9 @@ class SpectrumPlot {
         peakHold = new AnalyzerUtil.PeakHoldAndFall((double) peakHoldTime, (double) peakDropSpeed);
     }
 
+    // true when drawn together with the waterfall (1D+2D mode)
+    boolean combinedLayout = false;
+
     void setCanvas(int _canvasWidth, int _canvasHeight, double[] axisBounds) {
 //        Log.i("SpectrumPlot", "setCanvas: W="+_canvasWidth+"  H="+_canvasHeight);
         canvasWidth  = _canvasWidth;
@@ -197,6 +200,12 @@ class SpectrumPlot {
             plot2D.plotCrossline(c, cursorFreq, cursorDB, cursorPaint);
         }
 
-        plot2D.drawAxisLabels(c, labelPaint, gridPaint, gridPaint);
+        if (combinedLayout) {
+            // The frequency axis is drawn once, under the waterfall.
+            AxisTickLabels.draw(c, axisY, plot2D.gridLabelY,
+                    0f, 0f, 1, -1, labelPaint, gridPaint, gridPaint);
+        } else {
+            plot2D.drawAxisLabels(c, labelPaint, gridPaint, gridPaint);
+        }
     }
 }
