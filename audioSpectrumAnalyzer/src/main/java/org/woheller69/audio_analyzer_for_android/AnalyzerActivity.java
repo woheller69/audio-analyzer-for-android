@@ -428,8 +428,6 @@ public class AnalyzerActivity extends AppCompatActivity
 
         analyzerParam.audioSourceId = Integer.parseInt(sharedPref.getString("audioSource", Integer.toString(analyzerParam.RECORDER_AGC_OFF)));
         analyzerParam.wndFuncName = sharedPref.getString("windowFunction", "Hanning");
-        analyzerParam.spectrogramDuration = Double.parseDouble(sharedPref.getString("spectrogramDuration",
-                Double.toString(6.0)));
         analyzerParam.overlapPercent = Double.parseDouble(sharedPref.getString("fft_overlap_percent", "50.0"));
         analyzerParam.zeroPadFac = Integer.parseInt(sharedPref.getString("zeroPadding",getString(R.string.zeropadding_default))); //Zero padding factor
         analyzerParam.hopLen = (int)(analyzerParam.fftLen*(1 - analyzerParam.overlapPercent/100) + 0.5);
@@ -443,10 +441,9 @@ public class AnalyzerActivity extends AppCompatActivity
         );
 
         // spectrogram
-        analyzerViews.graphView.setSpectrogramModeShifting(sharedPref.getBoolean("spectrogramShifting", false));
         analyzerViews.graphView.setShowTimeAxis           (sharedPref.getBoolean("spectrogramTimeAxis", true));
-        analyzerViews.graphView.setShowFreqAlongX         (sharedPref.getBoolean("spectrogramShowFreqAlongX", true));
-        analyzerViews.graphView.setSmoothRender           (sharedPref.getBoolean("spectrogramSmoothRender", false));
+        // Frequency is always the X axis (shared with the spectrum); time runs top to bottom.
+        analyzerViews.graphView.setShowFreqAlongX(true);
         analyzerViews.graphView.setColorMap               (sharedPref.getString ("spectrogramColorMap", "Hot"));
         // set spectrogram show range
         analyzerViews.graphView.setSpectrogramDBLowerBound(Float.parseFloat(
@@ -479,6 +476,24 @@ public class AnalyzerActivity extends AppCompatActivity
                     rr = null;
                     break;
                 }
+            }
+            if (!sharedPref.getBoolean("combined_range_initialized", false)) {
+                // Migrate ranges saved while the combined View had uninitialized axes.
+                SharedPreferences.Editor rangeEditor = sharedPref.edit();
+                if (rr != null) {
+                    double configuredLower;
+                    try {
+                        configuredLower = Double.parseDouble(sharedPref.getString(
+                                "spectrumRange", Double.toString(AnalyzerGraphic.minDB)));
+                    } catch (NumberFormatException e) {
+                        configuredLower = AnalyzerGraphic.minDB;
+                    }
+                    if (AnalyzerGraphic.repairLegacyLockedDBRange(rr, configuredLower)) {
+                        AnalyzerUtil.putDouble(rangeEditor, "view_range_rr_2", rr[2]);
+                        AnalyzerUtil.putDouble(rangeEditor, "view_range_rr_3", rr[3]);
+                    }
+                }
+                rangeEditor.putBoolean("combined_range_initialized", true).apply();
             }
             if (rr != null) {
                 viewRangeArray = rr;
@@ -691,6 +706,7 @@ public class AnalyzerActivity extends AppCompatActivity
                 graphView.getLocationInWindow(windowLocation);
                 // Log.i(TAG, "scaleEvent(): xy=" + x + " " + y + "  wc = " + wc[0] + " " + wc[1]);
                 if (isPinching || xShift0 == INIT) {
+                    graphView.beginPan(y);
                     xShift0 = graphView.getXShift();
                     x0 = x;
                     yShift0 = graphView.getYShift();
@@ -884,7 +900,6 @@ public class AnalyzerActivity extends AppCompatActivity
             if (samplingThread != null && samplingThread.getPause() != pause) {
                 samplingThread.setPause(pause);
             }
-            analyzerViews.graphView.spectrogramPlot.setPause(pause);
             return false;
         } else if (itemId == R.id.freq_scaling_mode) {
             Log.d(TAG, "processClick(): freq_scaling_mode = " + value);

@@ -80,25 +80,10 @@
         android:key="spectrogramAppearance"
         android:title="@string/preference_spectrogramAppearance" >
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="spectrogramShifting"
-            android:summary="@string/preference_spectrogramShifting_1"
-            android:title="@string/preference_spectrogramShifting_2" />
-        <CheckBoxPreference
             android:defaultValue="true"
             android:key="spectrogramTimeAxis"
             android:summary="@string/preference_spectrogramTimeAxis_1"
             android:title="@string/preference_spectrogramTimeAxis_2" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="spectrogramShowFreqAlongX"
-            android:summary="@string/preference_spectrogramShowFreqAlongX_1"
-            android:title="@string/preference_spectrogramShowFreqAlongX_2" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="spectrogramSmoothRender"
-            android:summary="@string/preference_spectrogramSmoothRender_1"
-            android:title="@string/preference_spectrogramSmoothRender_2" />
 
         <ListPreference
             android:defaultValue="@string/dbColorMap_default"
@@ -114,13 +99,6 @@
             android:key="spectrogramRange"
             android:summary="@string/preference_spectrogramRange_1"
             android:title="@string/preference_spectrogramRange_2" />
-        <ListPreference
-            android:defaultValue="@string/spectrogram_duration_default"
-            android:entries="@array/spectrogram_duration_array"
-            android:entryValues="@array/spectrogram_duration_array"
-            android:key="spectrogramDuration"
-            android:summary="@string/preference_spectrogramDuration_1"
-            android:title="@string/preference_spectrogramDuration_2" />
         <ListPreference
             android:defaultValue="@string/spectrogram_fps_default"
             android:entries="@array/spectrogram_fps_array"

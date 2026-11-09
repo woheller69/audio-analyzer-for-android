@@ -54,7 +54,6 @@
     <string name="preference_miscellaneous">Различное</string>
     <string name="preference_experimental">Экспериментальные</string>
     <string name="screenshot">"Снимок экрана сохранён в "</string>
-    <string name="preference_spectrogramShowFreqAlongX_2">Частота как ось X</string>
     <string name="app_name">Анализатор звукового спектра</string>
     <string name="textview_cur_text">Сейчас :XXXXX.XГц(AX#+XX) -XXX.XдБ</string>
     <string name="button_run">НАЧАТЬ::СТОП</string>

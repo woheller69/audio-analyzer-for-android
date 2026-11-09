@@ -21,7 +21,7 @@
     <string name="button_freq_scaling_mode">LINEAR::LOG::NOTE</string>
     <string name="button_run">RUN::STOP</string>
     <string name="button_dbA">dB::dBA</string>
-    <string name="button_spectrum_spectrogram_mode">1D::2D</string>
+    <string name="button_spectrum_spectrogram_mode">dB::Time</string>
     <string name="button_recording">MON::REC</string>
     <string name="button_freq_freq">Curs</string>
 
@@ -91,20 +91,12 @@
     <string name="preference_spectrumRange_1">Show range of spectrum in dB scale</string>
     <string name="preference_spectrumRange_2">Spectrum range scale</string>
     <string name="preference_spectrogramAppearance">Spectrogram appearance</string>
-    <string name="preference_spectrogramShifting_1">The whole spectrogram shifts on a rolling basis over time</string>
-    <string name="preference_spectrogramShifting_2">Spectrogram shifting</string>
     <string name="preference_spectrogramTimeAxis_1">Turns on/off time axis label</string>
     <string name="preference_spectrogramTimeAxis_2">Show time axis</string>
-    <string name="preference_spectrogramShowFreqAlongX_1">So time axis is Y axis</string>
-    <string name="preference_spectrogramShowFreqAlongX_2">Frequency as X axis</string>
-    <string name="preference_spectrogramSmoothRender_1">Smoothly render the spectrogram</string>
-    <string name="preference_spectrogramSmoothRender_2">Smooth render</string>
     <string name="preference_spectrogramColorMap_1">Choose color of dB to map</string>
     <string name="preference_spectrogramColorMap_2">Color Map</string>
     <string name="preference_spectrogramRange_1">Show range of spectrogram in dB scale</string>
     <string name="preference_spectrogramRange_2">Spectrogram range</string>
-    <string name="preference_spectrogramDuration_1">Show duration of spectrogram (when average number is set to 1)</string>
-    <string name="preference_spectrogramDuration_2">Spectrogram duration</string>
     <string name="preference_spectrogramFPS_1">Higher for smoother graphic, lower to save battery.</string>
     <string name="preference_spectrogramFPS_2">Limit Refresh rate</string>
     <string name="preference_miscellaneous">Miscellaneous</string>

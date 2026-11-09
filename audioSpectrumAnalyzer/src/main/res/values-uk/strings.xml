@@ -19,7 +19,7 @@
     <string name="button_freq_scaling_mode">ЛІНІЙН::ЛОГ::НОТИ</string>
     <string name="button_run">СТАРТ::СТОП</string>
     <string name="button_dbA">дБ::дБА</string>
-    <string name="button_spectrum_spectrogram_mode">1D::2D</string>
+    <string name="button_spectrum_spectrogram_mode">dB::Time</string>
     <string name="show_range_tv_dBL">Установити нижню й верхню межі дБ</string>
     <string name="show_range_tv_dBH">(%1$.2f&lt;= дБ &lt;=%2$.2f)</string>
     <string name="et_freq_setting_lower_bound">нижня межа частоти</string>
@@ -79,20 +79,12 @@
     <string name="preference_spectrumRange_1">Показати проміжок спектру на шкалі дБ</string>
     <string name="preference_spectrumRange_2">Розмір шкали спектру</string>
     <string name="preference_spectrogramAppearance">Вигляд спектрограми</string>
-    <string name="preference_spectrogramShifting_1">Уся спектрограма потроху зсовується</string>
-    <string name="preference_spectrogramShifting_2">Рух спектрограми</string>
     <string name="preference_spectrogramTimeAxis_1">Увімкнути/вимкнути написи на часовій осі</string>
     <string name="preference_spectrogramTimeAxis_2">Показати часову вісь</string>
-    <string name="preference_spectrogramShowFreqAlongX_1">Тобто часова вісь — це Y</string>
-    <string name="preference_spectrogramShowFreqAlongX_2">Частота на осі X</string>
-    <string name="preference_spectrogramSmoothRender_1">Плавно зображати спектрограму</string>
-    <string name="preference_spectrogramSmoothRender_2">Плавне відображення</string>
     <string name="preference_spectrogramColorMap_1">Змінити відповідність кольорів до гучности дБ</string>
     <string name="preference_spectrogramColorMap_2">Схема кольорів</string>
     <string name="preference_spectrogramRange_1">Діапазон гучності в дБ</string>
     <string name="preference_spectrogramRange_2">Діапазон значень спектрограми</string>
-    <string name="preference_spectrogramDuration_1">Показувати тривалість спектрограми (коли середнє число встановлено на 1)</string>
-    <string name="preference_spectrogramDuration_2">Тривалість спектрограми</string>
     <string name="preference_spectrogramFPS_1">Вище для красивої графіки, нижче для енергозбереження.</string>
     <string name="preference_spectrogramFPS_2">Обмежити частоту кадрів</string>
     <string name="preference_miscellaneous">Різне</string>

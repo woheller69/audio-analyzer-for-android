@@ -22,7 +22,6 @@
 package org.woheller69.audio_analyzer_for_android;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -49,8 +48,11 @@ public class AnalyzerGraphic extends View {
     static final double minDB = -144f;    // hard lower bound for dB
     static final double maxDB = 12f;      // hard upper bound for dB
 
+    private int spectrumHeight;
     private int canvasWidth, canvasHeight;   // size of my canvas
     private int[] myLocation = {0, 0}; // window location on screen
+    private final int[] gestureLocation = new int[2];
+    private boolean adjustSpectrumY = false;
     private volatile static boolean isBusy = false;
     private double freq_lower_bound_for_log = 0f;
     private double[] savedDBSpectrum = new double[0];
@@ -105,8 +107,8 @@ public class AnalyzerGraphic extends View {
         spectrumPlot   .setZooms(xZoom, xShift, yZoom, yShift);
         spectrogramPlot.setZooms(xZoom, xShift, yZoom, yShift);
 
-        Resources res = _context.getResources();
-        spectrumPlot.axisY.vLowerBound = Float.parseFloat(res.getString(R.string.max_DB_range));
+        // Range dialogs and locked ranges can be read before the first sampling setup.
+        spectrumPlot.axisY.setBounds(0, Float.parseFloat(context.getResources().getString(R.string.max_DB_range)));
     }
 
     AnalyzerParameters analyzerParamCache;
@@ -125,7 +127,7 @@ public class AnalyzerGraphic extends View {
         // Spectrum
         double axisBounds[] = new double[]{freq_lower_bound_local, 0.0, sampleRate/2.0, spectrumPlot.axisY.vUpperBound};
         Log.i(TAG, "setupAxes(): W=" + canvasWidth + "  H=" + canvasHeight + "  dB=" + spectrumPlot.axisY.vUpperBound);
-        spectrumPlot.setCanvas(canvasWidth, canvasHeight, axisBounds);
+        spectrumPlot.setCanvas(canvasWidth, spectrumHeight, axisBounds);
 
         // Spectrogram
         freq_lower_bound_local = 0;
@@ -137,7 +139,7 @@ public class AnalyzerGraphic extends View {
         } else {
             axisBounds = new double[]{0.0, sampleRate/2.0, timeDurationE * nAve, freq_lower_bound_local};
         }
-        spectrogramPlot.setCanvas(canvasWidth, canvasHeight, axisBounds);
+        spectrogramPlot.setCanvas(canvasWidth, canvasHeight - spectrumHeight, axisBounds);
 
         analyzerParamCache = analyzerParam;
     }
@@ -176,7 +178,8 @@ public class AnalyzerGraphic extends View {
     }
 
     public void setShowFreqAlongX(boolean b) {
-        spectrogramPlot.setShowFreqAlongX(b);
+        // A horizontal frequency axis is shared by both panes.
+        spectrogramPlot.setShowFreqAlongX(true);
 
         if (showMode == PlotMode.SPECTRUM) return;
 
@@ -231,8 +234,16 @@ public class AnalyzerGraphic extends View {
             }
         }
         spectrogramPlot.spectrogramBMP.updateAxis(spectrogramPlot.axisFreq);
-        spectrogramPlot.prepare();
         showMode = PlotMode.SPECTROGRAM;
+    }
+
+    static boolean repairLegacyLockedDBRange(double[] ranges, double configuredLower) {
+        if (ranges[2] >= 0 && ranges[3] > ranges[2]) {
+            ranges[2] = configuredLower;
+            ranges[3] = 0;
+            return true;
+        }
+        return false;
     }
 
     double[] setViewRange(double[] _ranges, double[] rangesDefault) {
@@ -267,59 +278,30 @@ public class AnalyzerGraphic extends View {
             }
         }
 
-        // Set range
-        if (showMode == PlotMode.SPECTRUM) {
-            spectrumPlot.axisX.setViewBounds(ranges[0], ranges[1]);
-            spectrumPlot.axisY.setViewBounds(ranges[3], ranges[2]);  // reversed
-        } else if (showMode == PlotMode.SPECTROGRAM) {
-            if (spectrogramPlot.getSpectrogramMode() == SpectrogramPlot.TimeAxisMode.SHIFT) {
-                spectrogramPlot.axisTime.setViewBounds(ranges[5], ranges[4]);
-            } else {
-                spectrogramPlot.axisTime.setViewBounds(ranges[4], ranges[5]);
-            }
-            if (spectrogramPlot.showFreqAlongX) {
-                spectrogramPlot.axisFreq.setViewBounds(ranges[0], ranges[1]);
-            } else {
-                spectrogramPlot.axisFreq.setViewBounds(ranges[1], ranges[0]);
-            }
-            spectrogramPlot.spectrogramBMP.dBLowerBound = ranges[2];
-            spectrogramPlot.spectrogramBMP.dBUpperBound = ranges[3];
-            spectrogramPlot.spectrogramBMP.updateAxis(spectrogramPlot.axisFreq);
-        }
-
-        // Set zoom shift for view
-        if (showMode == PlotMode.SPECTRUM) {
-            xZoom  = spectrumPlot.axisX.getZoom();
-            xShift = spectrumPlot.axisX.getShift();
-            yZoom  = spectrumPlot.axisY.getZoom();
-            yShift = spectrumPlot.axisY.getShift();
-        } else if (showMode == PlotMode.SPECTROGRAM) {
-            if (spectrogramPlot.showFreqAlongX) {
-                xZoom  = spectrogramPlot.axisFreq.getZoom();
-                xShift = spectrogramPlot.axisFreq.getShift();
-                yZoom  = spectrogramPlot.axisTime.getZoom();
-                yShift = spectrogramPlot.axisTime.getShift();
-            } else {
-                yZoom  = spectrogramPlot.axisFreq.getZoom();
-                yShift = spectrogramPlot.axisFreq.getShift();
-                xZoom  = spectrogramPlot.axisTime.getZoom();
-                xShift = spectrogramPlot.axisTime.getShift();
-            }
-        }
+        // Both plots are visible: the selector must not change range semantics.
+        spectrumPlot.axisX.setViewBounds(ranges[0], ranges[1]);
+        spectrogramPlot.axisFreq.setViewBounds(ranges[0], ranges[1]);
+        spectrumPlot.axisY.setViewBounds(ranges[3], ranges[2]);
+        spectrogramPlot.spectrogramBMP.setDBRange(ranges[2], ranges[3]);
+        spectrogramPlot.spectrogramBMP.updateAxis(spectrogramPlot.axisFreq);
+        xZoom = spectrumPlot.axisX.getZoom();
+        xShift = spectrumPlot.axisX.getShift();
+        yZoom = showMode == PlotMode.SPECTRUM ? spectrumPlot.axisY.getZoom() : 1;
+        yShift = showMode == PlotMode.SPECTRUM ? spectrumPlot.axisY.getShift() : 0;
+        ranges[4] = spectrogramPlot.axisTime.vMinInView();
+        ranges[5] = spectrogramPlot.axisTime.vMaxInView();
 
         return ranges;
     }
 
     private void updateAxisZoomShift() {
         if (showMode == PlotMode.SPECTRUM) {
-            spectrumPlot   .setZooms(xZoom, xShift, yZoom, yShift);
+            spectrumPlot.setZooms(xZoom, xShift, yZoom, yShift);
+            spectrogramPlot.axisFreq.setZoomShift(xZoom, xShift);
         } else {
             spectrogramPlot.setZooms(xZoom, xShift, yZoom, yShift);
+            spectrumPlot.axisX.setZoomShift(xZoom, xShift);
         }
-    }
-
-    public void setSmoothRender(boolean b) {
-        spectrogramPlot.setSmoothRender(b);
     }
 
     public PlotMode getShowMode() {
@@ -332,10 +314,6 @@ public class AnalyzerGraphic extends View {
 
     public void setShowTimeAxis(boolean bSTA) {
         spectrogramPlot.setShowTimeAxis(bSTA);
-    }
-
-    public void setSpectrogramModeShifting(boolean b) {
-        spectrogramPlot.setSpectrogramModeShifting(b);
     }
 
     void setLogAxisMode(boolean b) {
@@ -367,12 +345,30 @@ public class AnalyzerGraphic extends View {
     protected void onDraw(Canvas c) {
         fpsCounter.inc();
         isBusy = true;
-        if (showMode == PlotMode.SPECTRUM) {
-            spectrumPlot.addCalibCurve(analyzerParamCache.micGainDB, null, analyzerParamCache.calibName);
-            spectrumPlot.drawSpectrumPlot(c, savedDBSpectrum);
-        } else {
-            spectrogramPlot.drawSpectrogramPlot(c);
+        if (analyzerParamCache == null || canvasWidth == 0 || canvasHeight == 0) {
+            isBusy = false;
+            return;
         }
+        // Update the waterfall first: its time labels determine the shared left margin.
+        c.save();
+        c.translate(0, spectrumHeight);
+        c.clipRect(0, 0, canvasWidth, canvasHeight - spectrumHeight);
+        spectrogramPlot.drawSpectrogramPlot(c);
+        c.restore();
+
+        float left = spectrogramPlot.labelBeginX;
+        int width = Math.max(1, Math.round(canvasWidth - left));
+        if (spectrumPlot.axisX.nCanvasPixel != canvasWidth - left
+                || spectrumPlot.axisY.nCanvasPixel != spectrumHeight) {
+            spectrumPlot.setCanvas(width, spectrumHeight, null);
+            spectrumPlot.axisX.setNCanvasPixel(canvasWidth - left);
+        }
+        c.save();
+        c.clipRect(0, 0, canvasWidth, spectrumHeight);
+        c.translate(left, 0);
+        spectrumPlot.addCalibCurve(analyzerParamCache.micGainDB, null, analyzerParamCache.calibName);
+        spectrumPlot.drawSpectrumPlot(c, savedDBSpectrum);
+        c.restore();
         isBusy = false;
     }
 
@@ -386,13 +382,11 @@ public class AnalyzerGraphic extends View {
             System.arraycopy(db, 0, savedDBSpectrum, 0, db.length);
         }
         // TODO: Run on another thread? Lock on data ? Or use CompletionService?
-        if (showMode == PlotMode.SPECTROGRAM) {
-            spectrogramPlot.saveRowSpectrumAsColor(savedDBSpectrum);
-        }
+        spectrogramPlot.saveRowSpectrumAsColor(savedDBSpectrum);
     }
 
     void setSpectrumDBLowerBound(double b) {
-        spectrumPlot.axisY.vUpperBound = b;
+        spectrumPlot.axisY.setBounds(0, b);
     }
 
     void setSpectrogramDBLowerBound(double b) {
@@ -415,10 +409,12 @@ public class AnalyzerGraphic extends View {
             x = x - myLocation[0];
             y = y - myLocation[1];
             // Convert to coordinate in axis
-            if (showMode == PlotMode.SPECTRUM) {
-                spectrumPlot.setCursor(x, y);
+            if (y < spectrumHeight) {
+                spectrumPlot.setCursor(x - spectrogramPlot.labelBeginX, y);
+                spectrogramPlot.setCursorFreq(spectrumPlot.getCursorFreq());
             } else {
-                spectrogramPlot.setCursor(x, y);
+                spectrogramPlot.setCursor(x, y - spectrumHeight);
+                spectrumPlot.setCursorFreq(spectrogramPlot.getCursorFreq(), spectrumPlot.getCursorDB());
             }
             return true;
         } else {
@@ -454,39 +450,18 @@ public class AnalyzerGraphic extends View {
 
     double[] getViewPhysicalRange() {
         double[] r = new double[12];
-        if (getShowMode() == AnalyzerGraphic.PlotMode.SPECTRUM) {
-            // fL, fU, dBL dBU, time L, time U
-            r[0] = spectrumPlot.axisX.vMinInView();
-            r[1] = spectrumPlot.axisX.vMaxInView();
-            r[2] = spectrumPlot.axisY.vMaxInView(); // reversed
-            r[3] = spectrumPlot.axisY.vMinInView();
-            r[4] = 0;
-            r[5] = 0;
-
-            // Limits of fL, fU, dBL dBU, time L, time U
-            r[6] = spectrumPlot.axisX.vLowerBound;
-            r[7] = spectrumPlot.axisX.vUpperBound;
-            r[8] = AnalyzerGraphic.minDB;
-            r[9] = AnalyzerGraphic.maxDB;
-            r[10]= 0;
-            r[11]= 0;
-        } else {
-            r[0] = spectrogramPlot.axisFreq.vMinInView();
-            r[1] = spectrogramPlot.axisFreq.vMaxInView();
-            if (r[0] > r[1]) { double t=r[0]; r[0]=r[1]; r[1]=t; }
-            r[2] = spectrogramPlot.spectrogramBMP.dBLowerBound;
-            r[3] = spectrogramPlot.spectrogramBMP.dBUpperBound;
-            r[4] = spectrogramPlot.axisTime.vMinInView();
-            r[5] = spectrogramPlot.axisTime.vMaxInView();
-
-            r[6] = spectrogramPlot.axisFreq.vLowerBound;
-            r[7] = spectrogramPlot.axisFreq.vUpperBound;
-            if (r[6] > r[7]) { double t=r[6]; r[6]=r[7]; r[7]=t; }
-            r[8] = AnalyzerGraphic.minDB;
-            r[9] = AnalyzerGraphic.maxDB;
-            r[10]= spectrogramPlot.axisTime.vLowerBound;
-            r[11]= spectrogramPlot.axisTime.vUpperBound;
-        }
+        r[0] = spectrumPlot.axisX.vMinInView();
+        r[1] = spectrumPlot.axisX.vMaxInView();
+        r[2] = spectrumPlot.axisY.vMaxInView(); // reversed dB axis
+        r[3] = spectrumPlot.axisY.vMinInView();
+        r[4] = spectrogramPlot.axisTime.vMinInView();
+        r[5] = spectrogramPlot.axisTime.vMaxInView();
+        r[6] = spectrumPlot.axisX.vLowerBound;
+        r[7] = spectrumPlot.axisX.vUpperBound;
+        r[8] = minDB;
+        r[9] = maxDB;
+        r[10] = spectrogramPlot.axisTime.vLowerBound;
+        r[11] = spectrogramPlot.axisTime.vUpperBound;
         for (int i=6; i<r.length; i+=2) {
             if (r[i] > r[i+1]) {
                 double t = r[i]; r[i] = r[i+1]; r[i+1] = t;
@@ -512,16 +487,12 @@ public class AnalyzerGraphic extends View {
     }
 
     public double getCanvasWidth() {
-        if (showMode == PlotMode.SPECTRUM) {
-            return canvasWidth;
-        } else {
-            return canvasWidth - spectrogramPlot.labelBeginX;
-        }
+        return canvasWidth - spectrogramPlot.labelBeginX;
     }
 
     public double getCanvasHeight() {
         if (showMode == PlotMode.SPECTRUM) {
-            return canvasHeight;
+            return spectrumHeight;
         } else {
             return spectrogramPlot.labelBeginY;
         }
@@ -557,7 +528,16 @@ public class AnalyzerGraphic extends View {
         updateAxisZoomShift();
     }
 
+    // Activity touch coordinates are in the window, not in this View.
+    void beginPan(double windowY) {
+        getLocationInWindow(gestureLocation);
+        double localY = windowY - gestureLocation[1];
+        adjustSpectrumY = showMode == PlotMode.SPECTRUM
+                && localY >= 0 && localY < spectrumHeight;
+    }
+
     public void setYShift(double offset) {
+        if (!adjustSpectrumY || showMode != PlotMode.SPECTRUM) return;
         yShift = clampYShift(offset);
         updateAxisZoomShift();
     }
@@ -567,7 +547,10 @@ public class AnalyzerGraphic extends View {
         xZoom = 1;
         yShift = 0;
         yZoom = 1;
-        updateAxisZoomShift();
+        // Reset both panes even when Time is the selected gesture target.
+        spectrumPlot.setZooms(1, 0, 1, 0);
+        spectrogramPlot.setZooms(1, 0, 1, 0);
+        invalidate();
     }
 
     private double xMidOld = 100;
@@ -581,6 +564,15 @@ public class AnalyzerGraphic extends View {
 
     // record the coordinate frame state when starting scaling
     public void setShiftScaleBegin(double x1, double y1, double x2, double y2) {
+        getLocationInWindow(gestureLocation);
+        x1 -= gestureLocation[0] + spectrogramPlot.labelBeginX;
+        x2 -= gestureLocation[0] + spectrogramPlot.labelBeginX;
+        y1 -= gestureLocation[1];
+        y2 -= gestureLocation[1];
+        // A pinch in the waterfall (or across panes) only changes frequency.
+        adjustSpectrumY = showMode == PlotMode.SPECTRUM
+                && y1 >= 0 && y1 < spectrumHeight
+                && y2 >= 0 && y2 < spectrumHeight;
         xMidOld = (x1+x2)/2f;
         xDiffOld = Math.abs(x1-x2);
         xZoomOld  = xZoom;
@@ -593,6 +585,11 @@ public class AnalyzerGraphic extends View {
 
     // Do the scaling according to the motion event getX() and getY() (getPointerCount()==2)
     public void setShiftScale(double x1, double y1, double x2, double y2) {
+        getLocationInWindow(gestureLocation);
+        x1 -= gestureLocation[0] + spectrogramPlot.labelBeginX;
+        x2 -= gestureLocation[0] + spectrogramPlot.labelBeginX;
+        y1 -= gestureLocation[1];
+        y2 -= gestureLocation[1];
         double limitXZoom;
         double limitYZoom;
         if (showMode == PlotMode.SPECTRUM) {
@@ -614,11 +611,14 @@ public class AnalyzerGraphic extends View {
         if (canvasWidth*0.13f < xDiffOld) {  // if fingers are not very close in x direction, do scale in x direction
             xZoom  = clamp(xZoomOld * Math.abs(x1-x2)/xDiffOld, 1f, limitXZoom);
         }
-        xShift = clampXShift(xShiftOld + (xMidOld/xZoomOld - (x1+x2)/2f/xZoom) / canvasWidth);
-        if (canvasHeight*0.13f < yDiffOld) {  // if fingers are not very close in y direction, do scale in y direction
+        xShift = clampXShift(xShiftOld + (xMidOld/xZoomOld - (x1+x2)/2f/xZoom) / Math.max(1, getCanvasWidth()));
+        if (adjustSpectrumY && spectrumHeight*0.13f < yDiffOld) {  // if fingers are not very close in y direction, do scale in y direction
             yZoom  = clamp(yZoomOld * Math.abs(y1-y2)/yDiffOld, 1f, limitYZoom);
         }
-        yShift = clampYShift(yShiftOld + (yMidOld/yZoomOld - (y1+y2)/2f/yZoom) / canvasHeight);
+        if (adjustSpectrumY) {
+            yShift = clampYShift(yShiftOld + (yMidOld/yZoomOld - (y1+y2)/2f/yZoom)
+                    / Math.max(1, spectrumHeight));
+        }
 //        Log.i(TAG, "setShiftScale: xZ="+xZoom+"  xS="+xShift+"  yZ="+yZoom+"  yS="+yShift);
         updateAxisZoomShift();
     }
@@ -639,8 +639,9 @@ public class AnalyzerGraphic extends View {
         isBusy = true;
         this.canvasWidth = w;
         this.canvasHeight = h;
-        spectrumPlot   .setCanvas(w, h, null);
-        spectrogramPlot.setCanvas(w, h, null);
+        spectrumHeight = Math.max(1, h / 4);
+        spectrumPlot.setCanvas(w, spectrumHeight, null);
+        spectrogramPlot.setCanvas(w, h - spectrumHeight, null);
         if (h > 0 && readyCallback != null) {
             readyCallback.ready();
         }
@@ -715,7 +716,7 @@ public class AnalyzerGraphic extends View {
             SavedState s = (SavedState) state;
             super.onRestoreInstanceState(s.getSuperState());
 
-            spectrogramPlot.showFreqAlongX = s.freqAxisAlongX == 1;
+            spectrogramPlot.setShowFreqAlongX(true);
 
             spectrumPlot.cursorFreq    = s.cFreqSpum;
             spectrogramPlot.cursorFreq = s.cFreqSpam;
@@ -728,6 +729,12 @@ public class AnalyzerGraphic extends View {
             spectrumPlot.axisY.setZoomShift(s.SpumYZ, s.SpumYS);
             spectrogramPlot.axisFreq.setZoomShift(s.SpamFZ, s.SpamFS);
             spectrogramPlot.axisTime.setZoomShift(s.SpamTZ, s.SpamTS);
+
+            xZoom = spectrumPlot.axisX.getZoom();
+            xShift = spectrumPlot.axisX.getShift();
+            spectrogramPlot.axisFreq.setZoomShift(xZoom, xShift);
+            yZoom = showMode == PlotMode.SPECTRUM ? spectrumPlot.axisY.getZoom() : 1;
+            yShift = showMode == PlotMode.SPECTRUM ? spectrumPlot.axisY.getShift() : 0;
 
             savedDBSpectrum = s.tmpS;
 

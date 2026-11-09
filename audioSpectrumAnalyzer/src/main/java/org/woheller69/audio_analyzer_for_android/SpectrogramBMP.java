@@ -54,6 +54,30 @@ class SpectrogramBMP {
         axisF = _axis;
     }
 
+    // Keep the most recent slices when the physical display height changes.
+    synchronized void resizeTimeRows(int rows, ScreenPhysicalMapping axis) {
+        int oldRows = spectrumStore.nTime;
+        int columns = spectrumStore.nFreq + 1;
+        if (oldRows <= 0 || spectrumStore.nFreq <= 0
+                || spectrumStore.dbShortArray.length < oldRows * columns) {
+            // Store not (fully) initialised yet: nothing to carry over.
+            if (spectrumStore.nFreq > 0) init(spectrumStore.nFreq, rows, axis);
+            return;
+        }
+        int keep = Math.min(rows, oldRows);
+        short[] history = new short[keep * columns];
+        for (int i = 0; i < keep; i++) {
+            int sourceRow = (spectrumStore.iTimePointer - keep + i + oldRows) % oldRows;
+            System.arraycopy(spectrumStore.dbShortArray, sourceRow * columns,
+                    history, i * columns, columns);
+        }
+        init(columns - 1, rows, axis);
+        System.arraycopy(history, 0, spectrumStore.dbShortArray,
+                (rows - keep) * columns, history.length);
+        spectrumStore.iTimePointer = 0;
+        rebuildAllBMP();
+    }
+
     void rebuildLinearBMP() {  // For state restore
         linBmp.rebuild(spectrumStore);
     }
@@ -120,6 +144,14 @@ class SpectrogramBMP {
         }
     }
 
+    synchronized void setDBRange(double lower, double upper) {
+        if (lower == dBLowerBound && upper == dBUpperBound) return;
+        dBLowerBound = lower;
+        dBUpperBound = upper;
+        // Existing rows must use the new mapping too, including when paused.
+        rebuildAllBMP();
+    }
+
     void setColorMap(String colorMapName) {
         cma = ColorMapArray.selectColorMap(colorMapName);
         // Refresh if we have spectrogram data
@@ -168,6 +200,13 @@ class SpectrogramBMP {
         // Consider use Bitmap
         // http://developer.android.com/reference/android/graphics/Bitmap.html#setPixels(int[], int, int, int, int, int, int)
 
+        c.save();
+        if (showModeSpectrogram == SpectrogramPlot.TimeAxisMode.SHIFT) {
+            // Ring-buffer drawing is oldest-first; flip only the image, not the axes.
+            c.translate(0, spectrumStore.nTime);
+            c.scale(1, -1);
+        }
+
         int pt;
         int lineLen;
 
@@ -215,6 +254,8 @@ class SpectrogramBMP {
             pt = linBmp.iTimePointer;
             lineLen = linBmp.nFreq;
         }
+
+        c.restore();
 
         // new data line
         if (showModeSpectrogram == SpectrogramPlot.TimeAxisMode.OVERWRITE) {

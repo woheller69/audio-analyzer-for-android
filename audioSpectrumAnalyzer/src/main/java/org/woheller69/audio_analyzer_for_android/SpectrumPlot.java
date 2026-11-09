@@ -197,6 +197,7 @@ class SpectrumPlot {
             plot2D.plotCrossline(c, cursorFreq, cursorDB, cursorPaint);
         }
 
-        plot2D.drawAxisLabels(c, labelPaint, gridPaint, gridPaint);
+        AxisTickLabels.draw(c, axisY, plot2D.gridLabelY,
+                0f, 0f, 1, -1, labelPaint, gridPaint, gridPaint);
     }
 }
