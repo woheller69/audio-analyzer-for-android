@@ -39,6 +39,7 @@ public class InfoRecActivity extends AppCompatActivity {
 	private CharSequence testResultSt = null;
 
 	private volatile boolean bShouldStop = false;
+	private volatile boolean bPaused = true;  // true while this screen is not in the foreground
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class InfoRecActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		bPaused = false;
 		final TextView tv = (TextView) findViewById(R.id.info_rec_tv);
 
 		if (testResultSt != null) {
@@ -101,6 +103,33 @@ public class InfoRecActivity extends AppCompatActivity {
 		}
 
 		runTest(tv, 7);
+	}
+
+	// Stop the recorder test as soon as the user leaves this screen, and wait until the
+	// microphone is released so that the main analyzer can resume normal capture.
+	@Override
+	protected void onPause() {
+		bPaused = true;
+		stopTest();
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		stopTest();
+		super.onDestroy();
+	}
+
+	private void stopTest() {
+		bShouldStop = true;
+		Thread t = testerThread;
+		if (t != null && t.isAlive() && t != Thread.currentThread()) {
+			try {
+				t.join(1500);  // each test step is short (~100 ms + one buffer read)
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 
 	private Thread testerThread;
@@ -116,6 +145,7 @@ public class InfoRecActivity extends AppCompatActivity {
 						// ???
 					}
 				}
+				if (bPaused) return;  // user already left; do not touch the microphone
 				testResultSt = null;
 				setTextData(tv, getString(R.string.rec_tester_hint1));
 				bShouldStop = false;
