@@ -56,6 +56,8 @@
     <string name="preference_spectrumRange_1">頻譜顯示的動態範圍</string>
     <string name="preference_spectrumRange_2">頻譜動態範圍</string>
     <string name="preference_spectrogramAppearance">時頻譜設定</string>
+    <string name="preference_spectrogramShifting_1">時頻譜隨時間平移，而不是覆蓋式</string>
+    <string name="preference_spectrogramShifting_2">平移式時頻譜</string>
     <string name="title_activity_info_rec">錄音源信息</string>
     <string name="rec_tester_std">測試標準錄音源</string>
     <string name="rec_tester_support">測試支持的錄音源</string>
@@ -63,10 +65,16 @@
     <string name="rec_tester_error1">" Hz  錯誤\n"</string>
     <string name="rec_tester_col3_error2">讀取 0 byte</string>
     <string name="preference_spectrogramTimeAxis_2">顯示時間軸</string>
+    <string name="preference_spectrogramShowFreqAlongX_1">也即縱軸作爲時間軸</string>
+    <string name="preference_spectrogramShowFreqAlongX_2">橫軸作爲頻率軸</string>
+    <string name="preference_spectrogramSmoothRender_1">時頻譜隨時間平移，而不是覆蓋式</string>
+    <string name="preference_spectrogramSmoothRender_2">平移式時頻譜</string>
     <string name="preference_spectrogramColorMap_1">選擇分貝與顔色映射的風格</string>
     <string name="preference_spectrogramColorMap_2">色彩映射風格</string>
     <string name="preference_spectrogramRange_1">時頻譜顯示的動態範圍</string>
     <string name="preference_spectrogramRange_2">時頻譜動態範圍</string>
+    <string name="preference_spectrogramDuration_1">時頻譜記錄時長（頻譜平均數為1時）</string>
+    <string name="preference_spectrogramDuration_2">頻譜圖持續時間</string>
     <string name="preference_spectrogramFPS_1">調高可獲得更平滑的圖像，調低可節省電量。</string>
     <string name="preference_spectrogramFPS_2">刷新率限制</string>
     <string name="preference_miscellaneous">雜項</string>

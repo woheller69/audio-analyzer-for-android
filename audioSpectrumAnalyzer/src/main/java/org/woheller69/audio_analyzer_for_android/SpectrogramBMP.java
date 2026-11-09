@@ -34,6 +34,9 @@ class SpectrogramBMP {
 
     private ScreenPhysicalMapping axisF = null;
 
+    // 1D+2D mode: the newest slice is drawn at the top row (waterfall).
+    volatile boolean newestOnTop = false;
+
     void init(int _nFreq, int _nTime, ScreenPhysicalMapping _axis) {
         bmpWidth = calBmpWidth(_axis);
         synchronized (this) {
@@ -201,7 +204,7 @@ class SpectrogramBMP {
         // http://developer.android.com/reference/android/graphics/Bitmap.html#setPixels(int[], int, int, int, int, int, int)
 
         c.save();
-        if (showModeSpectrogram == SpectrogramPlot.TimeAxisMode.SHIFT) {
+        if (newestOnTop && showModeSpectrogram == SpectrogramPlot.TimeAxisMode.SHIFT) {
             // Ring-buffer drawing is oldest-first; flip only the image, not the axes.
             c.translate(0, spectrumStore.nTime);
             c.scale(1, -1);

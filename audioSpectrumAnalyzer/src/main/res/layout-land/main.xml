@@ -155,7 +155,7 @@
                 android:text="1D"
                 android:textSize="20sp"
                 custom:itemsDisplay="@string/button_spectrum_spectrogram_mode"
-                custom:items="spum spam" />
+                custom:items="spum spam both" />
 
             <org.woheller69.audio_analyzer_for_android.SelectorText
                 android:id="@+id/dbA"

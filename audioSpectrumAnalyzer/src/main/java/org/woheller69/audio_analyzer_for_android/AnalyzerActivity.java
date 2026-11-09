@@ -398,10 +398,7 @@ public class AnalyzerActivity extends AppCompatActivity
         if (analyzerParam.isAWeighting) {
             ((SelectorText) findViewById(R.id.dbA)).nextValue();
         }
-        boolean isSpam = sharedPref.getBoolean("spectrum_spectrogram_mode", true);
-        if (!isSpam) {
-            ((SelectorText) findViewById(R.id.spectrum_spectrogram_mode)).nextValue();
-        }
+        ((SelectorText) findViewById(R.id.spectrum_spectrogram_mode)).setValue(loadDisplayMode(sharedPref));
         String axisMode = sharedPref.getString("freq_scaling_mode", "linear");
         SelectorText st = (SelectorText) findViewById(R.id.freq_scaling_mode);
         st.setValue(axisMode);
@@ -428,6 +425,8 @@ public class AnalyzerActivity extends AppCompatActivity
 
         analyzerParam.audioSourceId = Integer.parseInt(sharedPref.getString("audioSource", Integer.toString(analyzerParam.RECORDER_AGC_OFF)));
         analyzerParam.wndFuncName = sharedPref.getString("windowFunction", "Hanning");
+        analyzerParam.spectrogramDuration = Double.parseDouble(sharedPref.getString("spectrogramDuration",
+                Double.toString(6.0)));
         analyzerParam.overlapPercent = Double.parseDouble(sharedPref.getString("fft_overlap_percent", "50.0"));
         analyzerParam.zeroPadFac = Integer.parseInt(sharedPref.getString("zeroPadding",getString(R.string.zeropadding_default))); //Zero padding factor
         analyzerParam.hopLen = (int)(analyzerParam.fftLen*(1 - analyzerParam.overlapPercent/100) + 0.5);
@@ -442,8 +441,9 @@ public class AnalyzerActivity extends AppCompatActivity
 
         // spectrogram
         analyzerViews.graphView.setShowTimeAxis           (sharedPref.getBoolean("spectrogramTimeAxis", true));
-        // Frequency is always the X axis (shared with the spectrum); time runs top to bottom.
-        analyzerViews.graphView.setShowFreqAlongX(true);
+        analyzerViews.graphView.setSpectrogramModeShifting(sharedPref.getBoolean("spectrogramShifting", false));
+        analyzerViews.graphView.setShowFreqAlongX         (sharedPref.getBoolean("spectrogramShowFreqAlongX", true));
+        analyzerViews.graphView.setSmoothRender           (sharedPref.getBoolean("spectrogramSmoothRender", false));
         analyzerViews.graphView.setColorMap               (sharedPref.getString ("spectrogramColorMap", "Hot"));
         // set spectrogram show range
         analyzerViews.graphView.setSpectrogramDBLowerBound(Float.parseFloat(
@@ -502,6 +502,25 @@ public class AnalyzerActivity extends AppCompatActivity
         } else {
             stickToMeasureModeCancel();
         }
+    }
+
+    // Display mode: "spum" (1D), "spam" (2D) or "both" (1D+2D).
+    // Older versions stored a boolean under "spectrum_spectrogram_mode".
+    private String loadDisplayMode(SharedPreferences sharedPref) {
+        String mode = null;
+        try {
+            mode = sharedPref.getString("display_mode", null);
+        } catch (ClassCastException ignored) {
+        }
+        if (mode == null) {
+            boolean isSpum = true;
+            try {
+                isSpum = sharedPref.getBoolean("spectrum_spectrogram_mode", true);
+            } catch (ClassCastException ignored) {
+            }
+            mode = isSpum ? "spum" : "spam";
+        }
+        return mode;
     }
 
     void stickToMeasureMode() {
@@ -900,6 +919,7 @@ public class AnalyzerActivity extends AppCompatActivity
             if (samplingThread != null && samplingThread.getPause() != pause) {
                 samplingThread.setPause(pause);
             }
+            analyzerViews.graphView.spectrogramPlot.setPause(pause);
             return false;
         } else if (itemId == R.id.freq_scaling_mode) {
             Log.d(TAG, "processClick(): freq_scaling_mode = " + value);
@@ -918,10 +938,12 @@ public class AnalyzerActivity extends AppCompatActivity
         } else if (itemId == R.id.spectrum_spectrogram_mode) {
             if (value.equals("spum")) {
                 analyzerViews.graphView.switch2Spectrum();
-            } else {
+            } else if (value.equals("spam")) {
                 analyzerViews.graphView.switch2Spectrogram();
+            } else {
+                analyzerViews.graphView.switch2Combined();
             }
-            editor.putBoolean("spectrum_spectrogram_mode", value.equals("spum"));
+            editor.putString("display_mode", value);
             editor.apply();
             return false;
         } else {

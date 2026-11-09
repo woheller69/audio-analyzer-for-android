@@ -436,9 +436,17 @@ class AnalyzerViews {
             return ;
         }
         isInvalidating = true;
-        // Both panels are drawn together; keep the 1D spectrum smooth even when the
-        // waterfall FPS setting is low (waterfall scrolling is driven by data, not draw rate).
-        long frameTime = (long)(1000/Math.max(fpsLimit, MIN_DRAW_FPS));
+        long frameTime;                      // time delay for next frame
+        AnalyzerGraphic.PlotMode mode = graphView.getShowMode();
+        if (mode == AnalyzerGraphic.PlotMode.SPECTROGRAM) {
+            frameTime = (long)(1000/fpsLimit);  // use a much lower frame rate for spectrogram
+        } else if (mode == AnalyzerGraphic.PlotMode.COMBINED) {
+            // Both panes are drawn together; keep the 1D spectrum smooth even when the
+            // waterfall FPS setting is low (waterfall scrolling is driven by data, not draw rate).
+            frameTime = (long)(1000/Math.max(fpsLimit, MIN_DRAW_FPS));
+        } else {
+            frameTime = 1000/60;
+        }
         long t = SystemClock.uptimeMillis();
         //  && !graphView.isBusy()
         if (t >= timeToUpdate) {    // limit frame rate

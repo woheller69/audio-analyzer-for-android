@@ -15,14 +15,25 @@ public class SpectrumRegressionTest {
         return InstrumentationRegistry.getInstrumentation().getTargetContext();
     }
 
-    @Test
-    public void spectrumRegression() throws Throwable {
+    private void runOnMain(Runnable check) throws Throwable {
         final Throwable[] error = new Throwable[1];
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
-            try { checkSpectrumVisibility(); }
+            try { check.run(); }
             catch (Throwable failure) { error[0] = failure; }
         });
         if (error[0] != null) throw error[0];
+    }
+
+    /** 1D+2D mode: pane-based gestures, ranges, state restore, resize. */
+    @Test
+    public void combinedModeRegression() throws Throwable {
+        runOnMain(this::checkSpectrumVisibility);
+    }
+
+    /** The original 1D and 2D views stay full-canvas, and the three modes can be cycled. */
+    @Test
+    public void displayModesRegression() throws Throwable {
+        runOnMain(this::checkDisplayModes);
     }
 
     private void checkSpectrumVisibility() {
@@ -30,6 +41,7 @@ public class SpectrumRegressionTest {
         require(graph.getViewPhysicalRange()[2] < 0,
                 "Uninitialized dB bounds can be saved as a positive-only locked range");
         graph.setShowFreqAlongX(true);
+        graph.switch2Combined();
         graph.setSpectrumDBLowerBound(-144);
         graph.layout(0, 0, 1080, 1200);
         AnalyzerParameters parameters = new AnalyzerParameters(getTargetContext().getResources());
@@ -43,17 +55,14 @@ public class SpectrumRegressionTest {
         double[] legacy = {0, parameters.sampleRate / 2.0, 0, 12, 0, 0};
         require(AnalyzerGraphic.repairLegacyLockedDBRange(legacy, -120),
                 "Legacy positive-only locked range was not repaired");
-        for (int mode = 0; mode < 2; mode++) {
-            if (mode == 0) graph.switch2Spectrogram(); else graph.switch2Spectrum();
-            graph.setViewRange(legacy, graph.getViewPhysicalRange());
-            require(graph.getViewPhysicalRange()[2] == -120
-                    && graph.getViewPhysicalRange()[3] == 0,
-                    "Range semantics changed with gesture mode");
-            require(graph.spectrogramPlot.spectrogramBMP.dBLowerBound == -120
-                    && graph.spectrogramPlot.spectrogramBMP.dBUpperBound == 0,
-                    "Waterfall was clipped by a different dB range");
-            assertVisible(graph);
-        }
+        graph.setViewRange(legacy, graph.getViewPhysicalRange());
+        require(graph.getViewPhysicalRange()[2] == -120
+                && graph.getViewPhysicalRange()[3] == 0,
+                "Locked range was not applied");
+        require(graph.spectrogramPlot.spectrogramBMP.dBLowerBound == -120
+                && graph.spectrogramPlot.spectrogramBMP.dBUpperBound == 0,
+                "Waterfall was clipped by a different dB range");
+        assertVisible(graph);
 
         double beforeTop = graph.spectrumPlot.axisY.vMinInView();
         double beforeBottom = graph.spectrumPlot.axisY.vMaxInView();
@@ -71,10 +80,10 @@ public class SpectrumRegressionTest {
         graph.setShiftScaleBegin(200, 50, 800, 200);
         graph.setShiftScale(200, 20, 800, 250);
         require(graph.spectrumPlot.axisY.getZoom() > 1, "Spectrum pinch stopped working");
-        graph.switch2Spectrogram();
         android.os.Parcelable saved = graph.onSaveInstanceState();
         AnalyzerGraphic restored = new AnalyzerGraphic(getTargetContext());
         restored.setShowFreqAlongX(true);
+        restored.switch2Combined();
         restored.setSpectrumDBLowerBound(-144);
         restored.layout(0, 0, 1080, 1200);
         restored.setupPlot(parameters);
@@ -90,15 +99,96 @@ public class SpectrumRegressionTest {
         graph.resetViewScale();
         require(graph.spectrumPlot.axisY.getZoom() == 1
                 && graph.spectrumPlot.axisY.getShift() == 0,
-                "Reset in Time mode did not restore spectrum");
+                "Reset did not restore spectrum");
         assertVisible(graph);
 
         graph.layout(0, 0, 1080, 1600);
         assertVisible(graph);
         graph.onRestoreInstanceState(graph.onSaveInstanceState());
-        graph.switch2Spectrum();
         graph.setXShift(0);
         assertVisible(graph);
+    }
+
+    private void checkDisplayModes() {
+        AnalyzerGraphic graph = new AnalyzerGraphic(getTargetContext());
+        graph.setShowFreqAlongX(true);
+        graph.setSpectrumDBLowerBound(-144);
+        graph.layout(0, 0, 1080, 1200);
+        AnalyzerParameters parameters = new AnalyzerParameters(getTargetContext().getResources());
+        graph.setupPlot(parameters);
+        graph.setShowLines(false);  // filled bars
+        double[] spectrum = new double[parameters.fftLen / 2 + 1];
+        Arrays.fill(spectrum, -65);
+        spectrum[128] = -20;
+
+        // 1D: the spectrum owns the whole canvas.
+        require(graph.getShowMode() == AnalyzerGraphic.PlotMode.SPECTRUM, "1D must be the default");
+        graph.saveSpectrum(spectrum);
+        require(graph.spectrumPlot.axisY.nCanvasPixel == 1200, "1D does not use the full height: "
+                + graph.spectrumPlot.axisY.nCanvasPixel);
+        require(blueInRegion(graph, 700, 1100) > 20, "1D spectrum missing in the lower part of the canvas");
+
+        // 2D: the waterfall owns the whole canvas.
+        graph.switch2Spectrogram();
+        require(graph.getShowMode() == AnalyzerGraphic.PlotMode.SPECTROGRAM, "2D mode not selected");
+        for (int i = 0; i < 400; i++) graph.saveSpectrum(spectrum);
+        int colourful = colourfulInRegion(graph, 400, 1100);
+        require(colourful > 200, "2D waterfall does not fill the canvas: " + colourful);
+
+        // 1D+2D: both panes, spectrum on top.
+        graph.switch2Combined();
+        require(graph.getShowMode() == AnalyzerGraphic.PlotMode.COMBINED, "1D+2D mode not selected");
+        require(graph.spectrumPlot.axisY.nCanvasPixel == 300, "1D+2D spectrum pane must be 1/4 of the canvas: "
+                + graph.spectrumPlot.axisY.nCanvasPixel);
+        for (int i = 0; i < 400; i++) graph.saveSpectrum(spectrum);
+        assertVisible(graph);
+
+        // and back, twice
+        for (int round = 0; round < 2; round++) {
+            graph.switch2Spectrum();
+            require(graph.spectrumPlot.axisY.nCanvasPixel == 1200, "1D lost the full height after 1D+2D");
+            require(blueInRegion(graph, 700, 1100) > 20, "1D spectrum missing after 1D+2D");
+            graph.switch2Spectrogram();
+            for (int i = 0; i < 400; i++) graph.saveSpectrum(spectrum);
+            require(colourfulInRegion(graph, 400, 1100) > 200, "2D waterfall missing after 1D+2D");
+            graph.switch2Combined();
+            for (int i = 0; i < 400; i++) graph.saveSpectrum(spectrum);
+            assertVisible(graph);
+        }
+    }
+
+    private Bitmap drawn(AnalyzerGraphic graph) {
+        Bitmap bitmap = Bitmap.createBitmap(graph.getWidth(), graph.getHeight(), Bitmap.Config.ARGB_8888);
+        graph.draw(new Canvas(bitmap));
+        return bitmap;
+    }
+
+    private int blueInRegion(AnalyzerGraphic graph, int y0, int y1) {
+        Bitmap bitmap = drawn(graph);
+        int n = 0;
+        for (int y = y0; y < y1; y++) {
+            for (int x = 0; x < bitmap.getWidth(); x++) {
+                int color = bitmap.getPixel(x, y);
+                int red = (color >> 16) & 255, green = (color >> 8) & 255, blue = color & 255;
+                if (blue > red + 60 && blue > green + 10) n++;
+            }
+        }
+        bitmap.recycle();
+        return n;
+    }
+
+    private int colourfulInRegion(AnalyzerGraphic graph, int y0, int y1) {
+        Bitmap bitmap = drawn(graph);
+        int n = 0;
+        for (int y = y0; y < y1; y += 4) {
+            for (int x = 0; x < bitmap.getWidth(); x += 4) {
+                int color = bitmap.getPixel(x, y);
+                int red = (color >> 16) & 255, green = (color >> 8) & 255, blue = color & 255;
+                if (Math.max(red, Math.max(green, blue)) - Math.min(red, Math.min(green, blue)) > 20) n++;
+            }
+        }
+        bitmap.recycle();
+        return n;
     }
 
     private void assertVisible(AnalyzerGraphic graph) {
